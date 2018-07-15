@@ -1,10 +1,26 @@
 const { Pool } = require('pg');
-const { user, host, database, password, port};
+const { user, host, database, password, port} = require('./secrets/db_config');
 
 const pool = new Pool({ user, host, database, password, port });
 
-pool.query('SELECT * FROM person', (err, res) => {
-    if (err) return console.log(err);
+//this is if you need to run multiple queries, which we dont
 
-    console.log(res.rows);
-});
+// pool.connect((err, client, release ) => {
+//     if (err) return console.log(err);
+//     console.log('pool.connect happened');
+//     client.query('SELECT * FROM person', (err, result) => {
+//         release();
+//         if (err) {
+//             return console.log(err);
+//         }
+//         console.log(result);
+//     })
+// });
+
+//we just need the first available client, so we call straight from pool
+// pool.query('SELECT * FROM person', (err, result) => {
+//     if (err) return console.log(err);
+//     console.log(result);
+// });
+
+module.exports = pool;
