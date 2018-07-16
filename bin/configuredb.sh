@@ -2,7 +2,7 @@
 
 echo "Configuring DB"
 
-dropdb -U node_user Frendo
+# make sure you have a postgres superuser named node_user, or change this to the name of your postgres user
 createdb -U node_user Frendo
 
 psql Frendo < ./bin/sql/frendo.sql

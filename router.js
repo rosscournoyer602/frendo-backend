@@ -4,13 +4,14 @@ module.exports = function(app) {
 
     app.get('/', (req, res) => {res.status(200).send('Hello There!')});
 
+    // Need route to get specific person
     app.get('/people', (req, res) => { 
         pool.query('SELECT * FROM person', (err, result) => {
             if (err) return console.log(err);
             res.status(200).send(result.rows);
         });
     });
-
+    
     app.post('/addperson', (req, res) => {
         const query = {
             name: 'add-person',
