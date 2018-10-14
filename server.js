@@ -8,4 +8,4 @@ app.use(morgan('combined'));
 app.use(bodyParser.json({ type: '*/*' }));
 router(app);
   
-app.listen(3000);
+app.listen(8080);
