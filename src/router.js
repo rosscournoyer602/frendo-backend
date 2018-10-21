@@ -1,4 +1,5 @@
-const pool = require('./db')
+const pool = require('../db');
+const { signup } = require('./auth');
 
 module.exports = function(app) {
 
@@ -33,5 +34,9 @@ module.exports = function(app) {
             if (err) console.log(err);
             res.status(200).send(result);
         });
-    });
+		});
+		
+		app.post('/signup', (req, res) => { 
+			signup(req, res);
+	});
 };
