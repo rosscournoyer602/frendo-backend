@@ -6,15 +6,35 @@ module.exports = {
 	signup: (req, res) => {
 		pool.connect().then(client => {
 			const queryText = 'SELECT EXISTS (SELECT true FROM auth_user WHERE email=$1);'
-			const queryParams = [req.body.email];
+			const checkEmailParam = [req.body.email];
 
-			client.query(queryText, queryParams).then(result => {
+			client.query(queryText, checkEmailParam).then(result => {
+				// console.log(result.rows[0].exists);
+				if (result.rows[0].exists === true) {
+					res.status(403).send(`User ${req.body.email} already exists, please sign in.`);
+				} 
+
+				bcrypt.genSalt(10, function(err, salt) {
+					if (err) console.log(err);
+					
+					bcrypt.hash(req.body.password, salt, null, function(err, hash) {
+						if (err) console.log(err);
+						
+						res.status(200).send('User account successfully created.');
+
+						const addPersonQuery = 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)';
+						const addUserParams = [req.body.email, hash]
+						client.query(addPersonQuery, addUserParams).then(result, err => {
+							if (err) console.log(err);
+							
+						});
+					});
+				});
 				client.release();
-				console.log(result);
 		})
 		.catch(error => {
+			res.send(error);
 			client.release();
-			console.log(error);
 		});
 	});
 		// if yes, return error/not authed
