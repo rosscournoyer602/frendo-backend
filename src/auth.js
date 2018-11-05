@@ -19,28 +19,29 @@ module.exports = {
 					
 					bcrypt.hash(req.body.password, salt, null, function(err, hash) {
 						if (err) console.log(err);
-						
-						res.status(200).send('User account successfully created.');
 
 						const addPersonQuery = 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)';
 						const addUserParams = [req.body.email, hash]
-						client.query(addPersonQuery, addUserParams).then(result, err => {
-							if (err) console.log(err);
-							
+						client.query(addPersonQuery, addUserParams).then(() => {
+							res.status(200).send('User account successfully created.');
+							client.release();
+						})
+						.catch(err => {
+							res.send(`Encountered unknown error: ${err}`);
+							client.release();
 						});
 					});
 				});
-				client.release();
 		})
-		.catch(error => {
-			res.send(error);
+		.catch(err => {
+			res.send(`Encountered unknown error: ${err}`);
 			client.release();
 		});
+	})
+	.catch(err => {
+		res.send(`Encountered unknown error: ${err}`);
+		client.release();
 	});
-		// if yes, return error/not authed
-		// if not, hash the password and create new entry with hashed password
-		// give user a token
-		// return authed
 	},
 	signin: () => {
 		// check if there is already a user with that email
