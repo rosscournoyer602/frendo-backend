@@ -12,26 +12,28 @@ module.exports = {
 				// console.log(result.rows[0].exists);
 				if (result.rows[0].exists === true) {
 					res.status(403).send(`User ${req.body.email} already exists, please sign in.`);
-				} 
+					client.release();
+				} else {
 
-				bcrypt.genSalt(10, function(err, salt) {
-					if (err) console.log(err);
-					
-					bcrypt.hash(req.body.password, salt, null, function(err, hash) {
+					bcrypt.genSalt(10, function(err, salt) {
 						if (err) console.log(err);
+						
+						bcrypt.hash(req.body.password, salt, null, function(err, hash) {
+							if (err) console.log(err);
 
-						const addPersonQuery = 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)';
-						const addUserParams = [req.body.email, hash]
-						client.query(addPersonQuery, addUserParams).then(() => {
-							res.status(200).send('User account successfully created.');
-							client.release();
-						})
-						.catch(err => {
-							res.send(`Encountered unknown error: ${err}`);
-							client.release();
+							const addPersonQuery = 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)';
+							const addUserParams = [req.body.email, hash]
+							client.query(addPersonQuery, addUserParams).then(() => {
+								res.status(200).send('User account successfully created.');
+								client.release();
+							})
+							.catch(err => {
+								res.send(`Encountered unknown error: ${err}`);
+								client.release();
+							});
 						});
 					});
-				});
+			}
 		})
 		.catch(err => {
 			res.send(`Encountered unknown error: ${err}`);
