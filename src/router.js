@@ -1,5 +1,5 @@
 const pool = require('../db');
-const { signup } = require('./auth');
+const { signup, signin } = require('./auth');
 
 module.exports = function(app) {
 
@@ -38,5 +38,9 @@ module.exports = function(app) {
 		
 		app.post('/signup', (req, res) => { 
 			signup(req, res);
-	});
+		});
+
+		app.post('/signin', (req, res) => {
+			signin(req, res);
+		});
 };

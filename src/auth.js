@@ -5,50 +5,53 @@ const passport = require('passport');
 module.exports = {
 	signup: (req, res) => {
 		pool.connect().then(client => {
-			const queryText = 'SELECT EXISTS (SELECT true FROM auth_user WHERE email=$1);'
-			const checkEmailParam = [req.body.email];
 
-			client.query(queryText, checkEmailParam).then(result => {
-				// console.log(result.rows[0].exists);
-				if (result.rows[0].exists === true) {
-					res.status(403).send(`User ${req.body.email} already exists, please sign in.`);
-					client.release();
-				} else {
+			bcrypt.genSalt(10, function(err, salt) {			
+				bcrypt.hash(req.body.password, salt, null, function(err, hash) {
 
-					bcrypt.genSalt(10, function(err, salt) {
-						if (err) console.log(err);
-						
-						bcrypt.hash(req.body.password, salt, null, function(err, hash) {
-							if (err) console.log(err);
-
-							const addPersonQuery = 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)';
-							const addUserParams = [req.body.email, hash]
-							client.query(addPersonQuery, addUserParams).then(() => {
-								res.status(200).send('User account successfully created.');
-								client.release();
-							})
-							.catch(err => {
-								res.send(`Encountered unknown error: ${err}`);
-								client.release();
-							});
-						});
+					const addPersonQuery = 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)';
+					const addUserParams = [req.body.email, hash]
+					client.query(addPersonQuery, addUserParams).then(result => {
+						res.status(200).send(result);
+						client.release();
+					})
+					.catch(err => {
+						res.status(403).send(err.detail);
+						client.release();
 					});
-			}
+				});
+			});
 		})
 		.catch(err => {
 			res.send(`Encountered unknown error: ${err}`);
 			client.release();
 		});
-	})
-	.catch(err => {
-		res.send(`Encountered unknown error: ${err}`);
-		client.release();
-	});
 	},
-	signin: () => {
-		// check if there is already a user with that email
-		// if not return err/not authed
-		// if yes, return token
-		// return authed
+	signin: (req, res) => {
+		pool.connect().then(client => {
+
+			const getPersonQuery = 'SELECT * FROM auth_user WHERE email = ($1)';
+			const getPersonParams = [req.body.email];
+			client.query(getPersonQuery, getPersonParams).then(result => {
+				bcrypt.compare(req.body.password, result.rows[0].password_hash, function(err, compare) {
+					if (compare === true) {
+						res.status(200).send('Logged in');
+						client.release();
+					}
+					if (compare === false) {
+						res.status(403).send('Password Incorrect');
+						client.release();
+					}
+				});
+			})
+			.catch(err => {
+				res.status(403).send(err);
+				client.release();
+			});
+		})
+		.catch(err => {
+			res.send(`Encountered unknown error: ${err}`);
+			client.release();
+		});
 	}
 };
