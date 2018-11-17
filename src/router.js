@@ -1,5 +1,8 @@
 const pool = require('../db');
 const { signup, signin } = require('./auth');
+const passportService = require('./passport');
+const passport = require('passport');
+const requireSignin = passport.authenticate('local', { session: false} );
 
 module.exports = function(app) {
 
@@ -36,11 +39,7 @@ module.exports = function(app) {
         });
 		});
 		
-		app.post('/signup', (req, res) => { 
-			signup(req, res);
-		});
+		app.post('/signup', signup);
 
-		app.post('/signin', (req, res) => {
-			signin(req, res);
-		});
+		app.post('/signin', requireSignin, signin);
 };

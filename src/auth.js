@@ -1,6 +1,12 @@
 const bcrypt = require('bcrypt-nodejs');
 const pool = require('../db');
-const passport = require('passport');
+const { secret } = require('../config.json');
+const jwt = require('jwt-simple');
+
+function tokenForUser(userEmail) {
+	const timestamp = new Date().getTime();
+	return jwt.encode({ sub: userEmail, iat: timestamp }, secret);
+}
 
 module.exports = {
 	signup: (req, res) => {
@@ -12,7 +18,8 @@ module.exports = {
 					const addPersonQuery = 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)';
 					const addUserParams = [req.body.email, hash]
 					client.query(addPersonQuery, addUserParams).then(result => {
-						res.status(200).send(result);
+						tokenForUser();
+						res.status(200).json({token: tokenForUser(req.body.email)});
 						client.release();
 					})
 					.catch(err => {
@@ -28,30 +35,8 @@ module.exports = {
 		});
 	},
 	signin: (req, res) => {
-		pool.connect().then(client => {
-
-			const getPersonQuery = 'SELECT * FROM auth_user WHERE email = ($1)';
-			const getPersonParams = [req.body.email];
-			client.query(getPersonQuery, getPersonParams).then(result => {
-				bcrypt.compare(req.body.password, result.rows[0].password_hash, function(err, compare) {
-					if (compare === true) {
-						res.status(200).send('Logged in');
-						client.release();
-					}
-					if (compare === false) {
-						res.status(403).send('Password Incorrect');
-						client.release();
-					}
-				});
-			})
-			.catch(err => {
-				res.status(403).send(err);
-				client.release();
-			});
-		})
-		.catch(err => {
-			res.send(`Encountered unknown error: ${err}`);
-			client.release();
-		});
+    //user has had their email and password authed using passport.js local strategy
+    //we just need to give them a token
+    res.send({ token: tokenForUser(req.user) })
 	}
 };
