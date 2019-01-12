@@ -16,6 +16,7 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
       client
         .query(getPersonQuery, getPersonParams)
         .then(result => {
+          if (!result.rows[0]) done(null, false);
           bcrypt.compare(password, result.rows[0].password_hash, (err, compare) => {
             if (compare === true) {
               done(null, { id: result.rows[0].email });
@@ -28,13 +29,12 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
           });
         })
         .catch(err => {
-          res.send(err);
+          console.log(err);
           client.release();
         });
     })
     .catch(err => {
-      res.send(`Encountered unknown error: ${err}`);
-      client.release();
+      console.log(`Encountered unknown error: ${err}`);
     });
 });
 

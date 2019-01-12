@@ -3,6 +3,7 @@ const pool = require('../db');
 // eslint-disable-next-line no-unused-vars
 const passportService = require('./passport');
 const { signup, signin } = require('./auth');
+const { addPerson } = require('./person');
 
 const requireSignin = passport.authenticate('local', { session: false });
 
@@ -20,30 +21,7 @@ module.exports = app => {
     });
   });
 
-  app.post('/addperson', (req, res) => {
-    const query = {
-      name: 'add-person',
-      text:
-        // eslint-disable-next-line no-multi-str
-        'INSERT INTO person\
-            (first_name, last_name, dob, street_address, city, state, phone, email)\
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-      values: [
-        req.body.firstName,
-        req.body.lastName,
-        req.body.dob,
-        req.body.streetAddress,
-        req.body.city,
-        req.body.state,
-        req.body.phone,
-        req.body.email
-      ]
-    };
-    pool.query(query, (err, result) => {
-      if (err) console.log(err);
-      res.status(200).send(result);
-    });
-  });
+  app.post('/addperson', addPerson);
 
   app.post('/signup', signup);
 

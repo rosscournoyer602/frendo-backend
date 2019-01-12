@@ -20,6 +20,9 @@ CREATE TABLE friendships(
     person_two INTEGER REFERENCES person
 );
 
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO node_user;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO node_user;
+
 INSERT INTO auth_user
 (email, password_hash)
 VALUES
