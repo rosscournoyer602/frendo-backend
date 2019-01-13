@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const passport = require('passport');
 const pool = require('../db');
 // eslint-disable-next-line no-unused-vars
