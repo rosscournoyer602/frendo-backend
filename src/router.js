@@ -3,7 +3,7 @@ const pool = require('../db');
 // eslint-disable-next-line no-unused-vars
 const passportService = require('./passport');
 const { signup, signin } = require('./auth');
-const { addPerson } = require('./person');
+const { addPerson, getPerson } = require('./person');
 
 const requireSignin = passport.authenticate('local', { session: false });
 
@@ -20,6 +20,8 @@ module.exports = app => {
       res.status(200).send(result.rows);
     });
   });
+
+  app.get('/person', getPerson);
 
   app.post('/addperson', addPerson);
 
