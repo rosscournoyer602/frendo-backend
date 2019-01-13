@@ -2,6 +2,7 @@ const pool = require('../db');
 
 module.exports = {
   addPerson: (req, res) => {
+    console.log(req.data);
     const query = {
       name: 'add-person',
       text:
