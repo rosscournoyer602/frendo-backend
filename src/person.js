@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable no-multi-str */
 const pool = require('../db');
 
@@ -24,7 +23,6 @@ module.exports = {
     pool.query(query, (err, result) => {
       if (err) {
         res.status(401).send('Bad Request');
-        console.log(err);
       }
       // TODO - Better error handling
       if (!err) {
@@ -38,12 +36,12 @@ module.exports = {
       text: 'SELECT * \
              FROM person \
              WHERE email = ($1);',
-      values: [req.body.email]
+      values: [req.query.email]
     };
+
     pool.query(query, (err, result) => {
       if (err) {
         res.status(401).send('Bad Request');
-        console.log(err);
       }
       // TODO - Better error handling
       if (!err) {
