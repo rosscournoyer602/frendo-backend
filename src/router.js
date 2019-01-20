@@ -7,6 +7,7 @@ const { signup, signin } = require('./auth');
 const { addPerson, getPerson } = require('./person');
 
 const requireSignin = passport.authenticate('local', { session: false });
+const requireAuth = passport.authenticate('jwt', { session: false });
 
 module.exports = app => {
   app.get('/', (req, res) => {
@@ -22,9 +23,9 @@ module.exports = app => {
     });
   });
 
-  app.get('/person', getPerson);
+  app.get('/person', requireAuth, getPerson);
 
-  app.post('/addperson', addPerson);
+  app.post('/addperson', requireAuth, addPerson);
 
   app.post('/signup', signup);
 

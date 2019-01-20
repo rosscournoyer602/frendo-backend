@@ -2,11 +2,14 @@
 const LocalStrategy = require('passport-local');
 const passport = require('passport');
 const bcrypt = require('bcrypt-nodejs');
+const JwtStrategy = require('passport-jwt').Strategy;
+// eslint-disable-next-line prefer-destructuring
+const ExtractJwt = require('passport-jwt').ExtractJwt;
 const pool = require('../db');
-// const JwtStrategy = require('passport-jwt').Strategy;
-// const ExtractJwt = require('passport-jwt').ExtractJwt;
+const { secret } = require('../config.json');
 
 const localOptions = { usernameField: 'email' };
+// TODO - USE pool.query instead
 const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
   pool
     .connect()
@@ -37,5 +40,26 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
       console.log(`Encountered unknown error: ${err}`);
     });
 });
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+  secretOrKey: secret
+};
+const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
+  const query = {
+    name: 'find-person',
+    text: 'SELECT * FROM auth_user WHERE email = ($1)',
+    values: [payload.sub.id]
+  };
+  pool.query(query, (err, result) => {
+    if (!result || result.rows.length === 0) {
+      console.log('Err', err);
+      done(err, false);
+    }
+    if (result) {
+      done(null, true);
+    }
+  });
+});
 
+passport.use(jwtLogin);
 passport.use(localLogin);
