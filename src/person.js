@@ -3,6 +3,7 @@ const pool = require('../db');
 
 module.exports = {
   addPerson: (req, res) => {
+    console.log('BODY', req.body);
     const query = {
       name: 'add-person',
       text:
@@ -22,7 +23,7 @@ module.exports = {
     };
     pool.query(query, (err, result) => {
       if (err) {
-        res.status(401).send('Bad Request');
+        res.status(400).send('Bad Request');
       }
       // TODO - Better error handling
       if (!err) {
@@ -41,7 +42,7 @@ module.exports = {
 
     pool.query(query, (err, result) => {
       if (err) {
-        res.status(401).send('Bad Request');
+        res.status(400).send('Bad Request');
       }
       // TODO - Better error handling
       if (!err) {
