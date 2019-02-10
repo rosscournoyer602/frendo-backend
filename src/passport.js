@@ -51,8 +51,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
     values: [payload.sub.id]
   };
   pool.query(query, (err, result) => {
-    if (!result || result.rows.length === 0) {
-      console.log('Err', err);
+    if (err) {
       done(err, false);
     }
     if (result) {

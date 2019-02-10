@@ -27,7 +27,7 @@ module.exports = {
                 client.release();
               })
               .catch(err => {
-                res.status(403).send(err.detail);
+                res.send(err);
                 client.release();
               });
           });
