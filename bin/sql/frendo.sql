@@ -12,7 +12,8 @@ CREATE TABLE person(
     city VARCHAR(40) NOT NULL,
     state_province VARCHAR(30) NOT NULL,
     phone VARCHAR(20) NOT NULL,
-    email VARCHAR(40) UNIQUE REFERENCES auth_user
+    email VARCHAR(40) UNIQUE REFERENCES auth_user,
+    avatar_url VARCHAR(100) UNIQUE
 );
 
 CREATE TABLE friendships(
