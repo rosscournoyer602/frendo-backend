@@ -4,7 +4,7 @@ const pool = require('../db');
 // eslint-disable-next-line no-unused-vars
 const passportService = require('./passport');
 const { signup, signin } = require('./auth');
-const { addPerson, getPerson } = require('./person');
+const { addPerson, getPerson, updateAvatar } = require('./person');
 
 const requireSignin = passport.authenticate('local', { session: false });
 const requireAuth = passport.authenticate('jwt', { session: false });
@@ -30,4 +30,6 @@ module.exports = app => {
   app.post('/signup', signup);
 
   app.post('/signin', requireSignin, signin);
+
+  app.put('/avatar', requireAuth, updateAvatar);
 };

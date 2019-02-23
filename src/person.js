@@ -1,5 +1,8 @@
 /* eslint-disable no-multi-str */
+const AWS = require('aws-sdk');
 const pool = require('../db');
+
+const s3 = new AWS.S3();
 
 module.exports = {
   addPerson: (req, res) => {
@@ -49,5 +52,9 @@ module.exports = {
         res.send(result);
       }
     });
+  },
+  updateAvatar: (req, res) => {
+    console.log(req.body);
+    res.send();
   }
 };

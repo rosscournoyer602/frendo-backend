@@ -52,9 +52,11 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   };
   pool.query(query, (err, result) => {
     if (err) {
+      console.log('ERR');
       done(err, false);
     }
     if (result) {
+      console.log('SUCCESS');
       done(null, true);
     }
   });
