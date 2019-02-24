@@ -1,6 +1,19 @@
 /* eslint-disable no-multi-str */
 const AWS = require('aws-sdk');
 const pool = require('../db');
+// const { s3key } = require('../config');
+
+AWS.config.update({
+  // Your SECRET ACCESS KEY from AWS should go here,
+  // Never share it!
+  // Setup Env Variable, e.g: process.env.SECRET_ACCESS_KEY
+  secretAccessKey: 'LXUL/eart5wnf8rU6GEy7XUBhy8zHxxqROrM/LLA',
+  // Not working key, Your ACCESS KEY ID from AWS should go here,
+  // Never share it!
+  // Setup Env Variable, e.g: process.env.ACCESS_KEY_ID
+  accessKeyId: 'AKIAIZINNYGGMORPNW7Q',
+  region: 'ap-northeast-1' // region of your bucket
+});
 
 const s3 = new AWS.S3();
 
@@ -55,6 +68,24 @@ module.exports = {
   },
   updateAvatar: (req, res) => {
     console.log(req.body);
-    res.send();
+    const type = req.body.data.split(';')[0].split('/')[1];
+    const buffer = Buffer.from(req.body.data.replace(/^data:image\/\w+;base64,/, ''), 'base64');
+    const params = {
+      Bucket: 'friendo2',
+      Key: `${req.body.user}.${type}`,
+      Body: buffer,
+      ACL: 'public-read',
+      ContentEncoding: 'base64',
+      ContentType: `image/${type}`
+    };
+    s3.upload(params, (err, data) => {
+      console.log(err, data);
+      if (err) {
+        res.send(err);
+      }
+      if (!err) {
+        res.send(data);
+      }
+    });
   }
 };
