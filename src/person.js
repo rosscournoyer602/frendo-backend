@@ -1,17 +1,17 @@
 /* eslint-disable no-multi-str */
 const AWS = require('aws-sdk');
 const pool = require('../db');
-// const { s3key } = require('../config');
+const { s3key, s3keyID } = require('../config');
 
 AWS.config.update({
   // Your SECRET ACCESS KEY from AWS should go here,
   // Never share it!
   // Setup Env Variable, e.g: process.env.SECRET_ACCESS_KEY
-  secretAccessKey: 'LXUL/eart5wnf8rU6GEy7XUBhy8zHxxqROrM/LLA',
+  secretAccessKey: s3key,
   // Not working key, Your ACCESS KEY ID from AWS should go here,
   // Never share it!
   // Setup Env Variable, e.g: process.env.ACCESS_KEY_ID
-  accessKeyId: 'AKIAIZINNYGGMORPNW7Q',
+  accessKeyId: s3keyID,
   region: 'ap-northeast-1' // region of your bucket
 });
 
@@ -107,7 +107,24 @@ module.exports = {
         res.send(err);
       }
       if (!err) {
-        res.send(data);
+        console.log(data.key);
+        console.log(req.body.user);
+        // res.send(data);
+        const updateQuery = {
+          name: 'update-avatar',
+          text: `UPDATE person\
+            SET avatar_url = ($1)\
+            WHERE email = ($2)`,
+          values: [data.key, req.body.user]
+        };
+        pool.query(updateQuery, (updateErr, result) => {
+          if (updateErr) {
+            console.log(updateErr);
+          }
+          if (!err) {
+            res.send(result);
+          }
+        });
       }
     });
   }
