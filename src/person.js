@@ -37,8 +37,33 @@ module.exports = {
       ]
     };
     pool.query(query, (err, result) => {
-      if (err) {
+      if (err && err.code === '23505') {
         console.log(err);
+        const updateQuery = {
+          name: 'update-person',
+          text:
+            'UPDATE person\
+            SET (first_name, last_name, dob, street_address, city, state_province, phone) = ($1, $2, $3, $4, $5, $6, $7)\
+            WHERE email = ($8)',
+          values: [
+            req.body.first_name,
+            req.body.last_name,
+            req.body.dob,
+            req.body.street_address,
+            req.body.city,
+            req.body.state_province,
+            req.body.phone,
+            req.body.email
+          ]
+        };
+        pool.query(updateQuery, (updateErr, updateResult) => {
+          if (updateErr) {
+            console.log(updateErr);
+          }
+          if (!updateErr) {
+            res.send(updateResult);
+          }
+        });
       }
       // TODO - Better error handling
       if (!err) {
@@ -67,7 +92,6 @@ module.exports = {
     });
   },
   updateAvatar: (req, res) => {
-    console.log(req.body);
     const type = req.body.data.split(';')[0].split('/')[1];
     const buffer = Buffer.from(req.body.data.replace(/^data:image\/\w+;base64,/, ''), 'base64');
     const params = {
@@ -79,7 +103,6 @@ module.exports = {
       ContentType: `image/${type}`
     };
     s3.upload(params, (err, data) => {
-      console.log(err, data);
       if (err) {
         res.send(err);
       }
