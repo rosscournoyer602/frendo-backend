@@ -107,8 +107,6 @@ module.exports = {
         res.send(err);
       }
       if (!err) {
-        console.log(data.key);
-        console.log(req.body.user);
         // res.send(data);
         const updateQuery = {
           name: 'update-avatar',
