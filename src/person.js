@@ -24,7 +24,8 @@ module.exports = {
       text:
         'INSERT INTO person\
             (first_name, last_name, dob, street_address, city, state_province, phone, email)\
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)\
+            RETURNING first_name, last_name, dob, street_address, city, state_province, phone, avatar_url, email',
       values: [
         req.body.first_name,
         req.body.last_name,
@@ -44,7 +45,8 @@ module.exports = {
           text:
             'UPDATE person\
             SET (first_name, last_name, dob, street_address, city, state_province, phone) = ($1, $2, $3, $4, $5, $6, $7)\
-            WHERE email = ($8)',
+            WHERE email = ($8)\
+            RETURNING first_name, last_name, dob, street_address, city, state_province, phone, avatar_url, email',
           values: [
             req.body.first_name,
             req.body.last_name,
