@@ -39,7 +39,6 @@ module.exports = {
     };
     pool.query(query, (err, result) => {
       if (err && err.code === '23505') {
-        console.log(err);
         const updateQuery = {
           name: 'update-person',
           text:

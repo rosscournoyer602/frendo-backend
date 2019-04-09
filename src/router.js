@@ -5,6 +5,7 @@ const pool = require('../db');
 const passportService = require('./passport');
 const { signup, signin } = require('./auth');
 const { addPerson, getPerson, updateAvatar } = require('./person');
+const { updateFriends } = require('./friendship')
 
 const requireSignin = passport.authenticate('local', { session: false });
 const requireAuth = passport.authenticate('jwt', { session: false });
@@ -19,7 +20,7 @@ module.exports = app => {
     // eslint-disable-next-line consistent-return
     pool.query('SELECT * FROM person', (err, result) => {
       if (err) return console.log(err);
-      res.status(200).send(result.rows);
+      res.status(200).send(result);
     });
   });
 
@@ -32,4 +33,6 @@ module.exports = app => {
   app.post('/signin', requireSignin, signin);
 
   app.put('/avatar', requireAuth, updateAvatar);
+
+  app.post('/friendupdate', requireAuth, updateFriends);
 };

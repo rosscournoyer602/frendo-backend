@@ -1,3 +1,7 @@
+DROP TABLE friendships;
+DROP TABLE person;
+DROP TABLE auth_user;
+
 CREATE TABLE auth_user(
 	email VARCHAR(40) PRIMARY KEY,
 	password_hash VARCHAR(255) NOT NULL
@@ -18,22 +22,11 @@ CREATE TABLE person(
 
 CREATE TABLE friendships(
     person_one INTEGER REFERENCES person,
-    person_two INTEGER REFERENCES person
+    person_two INTEGER REFERENCES person,
+    friend_status VARCHAR(30),
+    CHECK (person_one < person_two),
+    PRIMARY KEY(person_one, person_two)
 );
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO node_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO node_user;
-
-INSERT INTO auth_user
-(email, password_hash)
-VALUES
-('aaron@email.com', 'password');
-
-INSERT INTO person
-(first_name, last_name, dob, street_address, city, state_province, phone, email)
-VALUES
-('Aaron', 'Aaronson', '1955-01-01', '123 Main St.', 'Hoboken', 'New Jersey', '6029926696', 'aaron@email.com');
-
-DROP TABLE friendships;
-DROP TABLE person;
-DROP TABLE auth_user;
