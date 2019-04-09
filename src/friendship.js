@@ -1,21 +1,22 @@
+/* eslint-disable no-multi-str */
 const pool = require('../db');
 
 module.exports = {
   updateFriends: (req, res) => {
     // assume req.body contains id1, id2, and option
     const values = [];
-
+    console.log(req.body);
     const { id1, id2, option } = req.body;
     if (id1 > id2) {
       values.push(id2);
       values.push(id1);
-      values.push(option)
+      values.push(option);
     } else {
       values.push(id1);
       values.push(id2);
-      values.push(option)
+      values.push(option);
     }
-
+    console.log('VALUES', values);
     const query = {
       name: 'update-friends',
       text:
@@ -29,25 +30,27 @@ module.exports = {
       if (!err) {
         res.send(result);
       }
+
       if (err && err.code === '23505') {
+        console.log('ERR CONDITION');
         const updateQuery = {
           name: 'update-existing-friends',
           text:
-          'UPDATE friendships\
+            'UPDATE friendships\
            SET friend_status = ($3)\
            WHERE (person_one,person_two) = ($1, $2)',
-           values
+          values
         };
-        pool.query(updateQuery, (updateErr, result) => {
+        pool.query(updateQuery, (updateErr, updateResult) => {
           if (!updateErr) {
-            res.send(result);
+            res.send(updateResult);
           }
           if (updateErr) {
             res.send(updateErr);
             console.log(updateErr);
           }
-        })
+        });
       }
     });
   }
-}
+};

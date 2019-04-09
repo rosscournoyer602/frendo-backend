@@ -5,7 +5,7 @@ const pool = require('../db');
 const passportService = require('./passport');
 const { signup, signin } = require('./auth');
 const { addPerson, getPerson, updateAvatar } = require('./person');
-const { updateFriends } = require('./friendship')
+const { updateFriends } = require('./friendship');
 
 const requireSignin = passport.authenticate('local', { session: false });
 const requireAuth = passport.authenticate('jwt', { session: false });
