@@ -5,7 +5,6 @@ module.exports = {
   updateFriends: (req, res) => {
     // assume req.body contains id1, id2, and option
     const values = [];
-    console.log(req.body);
     const { id1, id2, option } = req.body;
     if (id1 > id2) {
       values.push(id2);
@@ -16,7 +15,6 @@ module.exports = {
       values.push(id2);
       values.push(option);
     }
-    console.log('VALUES', values);
     const query = {
       name: 'update-friends',
       text:
@@ -50,6 +48,24 @@ module.exports = {
             console.log(updateErr);
           }
         });
+      }
+    });
+  },
+  getFriends: (req, res) => {
+    const { email } = req.body;
+    const query = {
+      name: 'get-friends',
+      text: 'SELECT * FROM friendships\
+          WHERE person_one =  OR person_two = 2;',
+      values: [email]
+    };
+    pool.query(query, (err, result) => {
+      if (!err) {
+        res.send(result);
+      }
+      if (err) {
+        console.log(err);
+        res.send(err);
       }
     });
   }
