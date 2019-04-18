@@ -52,12 +52,12 @@ module.exports = {
     });
   },
   getFriends: (req, res) => {
-    const { email } = req.body;
+    const { id } = req.query;
     const query = {
       name: 'get-friends',
       text: 'SELECT * FROM friendships\
-          WHERE person_one =  OR person_two = 2;',
-      values: [email]
+          WHERE person_one = ($1) OR person_two = ($1);',
+      values: [id]
     };
     pool.query(query, (err, result) => {
       if (!err) {
