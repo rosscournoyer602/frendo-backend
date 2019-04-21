@@ -55,13 +55,16 @@ module.exports = {
     const { id } = req.query;
     const query = {
       name: 'get-friends',
-      text: 'SELECT * FROM friendships\
-          WHERE person_one = ($1) OR person_two = ($1);',
+      text:
+        'SELECT * FROM friendships\
+        INNER JOIN person ON person.person_id = friendships.person_one OR person.person_id = friendships.person_two\
+        WHERE friendships.person_one = ($1) OR friendships.person_two = ($1);',
       values: [id]
     };
     pool.query(query, (err, result) => {
-      if (!err) {
-        res.send(result);
+      if (!err && result.rows) {
+        const friendsList = result.rows.filter(row => row.person_id !== parseInt(id, 10));
+        res.send(friendsList);
       }
       if (err) {
         console.log(err);
