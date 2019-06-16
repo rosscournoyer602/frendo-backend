@@ -4,7 +4,7 @@ const pool = require('../db');
 // eslint-disable-next-line no-unused-vars
 const passportService = require('./passport');
 const { signup, signin } = require('./auth');
-const { addPerson, getPerson, updateAvatar } = require('./person');
+const { addPerson, getPerson, updateAvatar, findPerson } = require('./person');
 const { updateFriends, getFriends } = require('./friendship');
 
 const requireSignin = passport.authenticate('local', { session: false });
@@ -37,4 +37,6 @@ module.exports = app => {
   app.post('/friendupdate', requireAuth, updateFriends);
 
   app.get('/friends', requireAuth, getFriends);
+
+  app.get('/search', requireAuth, findPerson);
 };

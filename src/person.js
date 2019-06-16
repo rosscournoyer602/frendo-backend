@@ -4,15 +4,9 @@ const pool = require('../db');
 const { s3key, s3keyID } = require('../config');
 
 AWS.config.update({
-  // Your SECRET ACCESS KEY from AWS should go here,
-  // Never share it!
-  // Setup Env Variable, e.g: process.env.SECRET_ACCESS_KEY
   secretAccessKey: s3key,
-  // Not working key, Your ACCESS KEY ID from AWS should go here,
-  // Never share it!
-  // Setup Env Variable, e.g: process.env.ACCESS_KEY_ID
   accessKeyId: s3keyID,
-  region: 'ap-northeast-1' // region of your bucket
+  region: 'ap-northeast-1'
 });
 
 const s3 = new AWS.S3();
@@ -79,6 +73,27 @@ module.exports = {
              FROM person \
              WHERE email = ($1);',
       values: [req.query.email]
+    };
+
+    pool.query(query, (err, result) => {
+      if (err) {
+        console.log(err);
+        // res.send(err);
+      }
+      // TODO - Better error handling
+      if (!err) {
+        res.send(result);
+      }
+    });
+  },
+  findPerson: (req, res) => {
+    const query = {
+      name: 'get-person',
+      text:
+        'SELECT * \
+         FROM person \
+         WHERE ($1) IN (first_name, last_name, phone, email);',
+      values: [req.query.search]
     };
 
     pool.query(query, (err, result) => {
