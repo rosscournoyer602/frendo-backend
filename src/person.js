@@ -123,15 +123,12 @@ module.exports = {
       Delete: {
         Objects: [
           {
-            Key: `/200x200/${req.body.user}.${type}`,
-            VersionId: '2LWg7lQLnY41.maGB5Z6SWW.dcq0vx7b'
+            Key: `200x200/${req.body.user}.${type}`
           },
           {
-            Key: `/64x64/${req.body.user}.${type}`,
-            VersionId: 'yoz3HB.ZhCS_tKVEmIOr7qYyyAaZSKVd'
+            Key: `64x64/${req.body.user}.${type}`
           }
-        ],
-        Quiet: false
+        ]
       }
     };
     s3.deleteObjects(deleteParams, (err, data) => {

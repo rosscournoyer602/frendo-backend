@@ -6,6 +6,7 @@ const router = require('./router');
 
 const app = express();
 
+app.disable('etag');
 app.use(cors());
 app.use(morgan('combined'));
 app.use(bodyParser.json({ type: '*/*', limit: '50mb' }));
