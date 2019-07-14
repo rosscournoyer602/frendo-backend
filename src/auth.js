@@ -3,11 +3,10 @@
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jwt-simple');
 const pool = require('../db');
-const { secret } = require('../config.json');
 
 function tokenForUser(userEmail) {
   const timestamp = new Date().getTime();
-  return jwt.encode({ sub: userEmail, iat: timestamp }, secret);
+  return jwt.encode({ sub: userEmail, iat: timestamp }, process.env.SECRET);
 }
 
 module.exports = {

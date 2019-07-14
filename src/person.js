@@ -1,11 +1,10 @@
 /* eslint-disable no-multi-str */
 const AWS = require('aws-sdk');
 const pool = require('../db');
-const { s3key, s3keyID } = require('../config');
 
 AWS.config.update({
-  secretAccessKey: s3key,
-  accessKeyId: s3keyID,
+  secretAccessKey: process.env.S3KEY,
+  accessKeyId: process.env.S3KEYID,
   region: 'ap-northeast-1'
 });
 

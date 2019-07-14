@@ -6,7 +6,6 @@ const JwtStrategy = require('passport-jwt').Strategy;
 // eslint-disable-next-line prefer-destructuring
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const pool = require('../db');
-const { secret } = require('../config.json');
 
 const localOptions = { usernameField: 'email' };
 // TODO - USE pool.query instead
@@ -42,7 +41,7 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
 });
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-  secretOrKey: secret
+  secretOrKey: process.env.SECRET
 };
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   const query = {
