@@ -5,22 +5,24 @@ module.exports = {
   updateFriends: (req, res) => {
     // assume req.body contains id1, id2, and option
     const values = [];
-    const { id1, id2, option } = req.body;
+    const { id1, id2, option, actionTaker } = req.body;
     if (id1 > id2) {
       values.push(id2);
       values.push(id1);
       values.push(option);
+      values.push(actionTaker);
     } else {
       values.push(id1);
       values.push(id2);
       values.push(option);
+      values.push(actionTaker);
     }
     const query = {
       name: 'update-friends',
       text:
         'INSERT INTO friendships\
-            (person_one, person_two, friend_status)\
-            VALUES ($1, $2, $3)',
+            (person_one, person_two, friend_status, action_taker)\
+            VALUES ($1, $2, $3, $4)',
       values
     };
 

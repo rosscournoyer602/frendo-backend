@@ -23,7 +23,8 @@ CREATE TABLE person(
 CREATE TABLE friendships(
     person_one INTEGER REFERENCES person,
     person_two INTEGER REFERENCES person,
-    friend_status VARCHAR(30),
+    friend_status INTEGER NOT NULL,
+    action_taker INTEGER NOT NULL
     CHECK (person_one < person_two),
     PRIMARY KEY(person_one, person_two)
 );

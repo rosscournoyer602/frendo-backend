@@ -34,7 +34,7 @@ module.exports = app => {
 
   app.put('/avatar', requireAuth, updateAvatar);
 
-  app.post('/friendupdate', requireAuth, updateFriends);
+  app.put('/friendupdate', requireAuth, updateFriends);
 
   app.get('/friends', requireAuth, getFriends);
 
