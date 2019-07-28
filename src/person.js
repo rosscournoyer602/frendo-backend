@@ -86,6 +86,7 @@ module.exports = {
     });
   },
   findPerson: (req, res) => {
+    console.log('FIND', req.query);
     const query = {
       name: 'get-person',
       text:
@@ -102,6 +103,7 @@ module.exports = {
       }
       // TODO - Better error handling
       if (!err) {
+        console.log('SEARCH RESULT', result);
         res.send(result);
       }
     });

@@ -3,7 +3,7 @@ const pool = require('../db');
 
 module.exports = {
   updateFriends: (req, res) => {
-    // assume req.body contains id1, id2, and option
+    console.log('UPDATE', req.body);
     const values = [];
     const { id1, id2, option, actionTaker } = req.body;
     if (id1 > id2) {
@@ -17,6 +17,7 @@ module.exports = {
       values.push(option);
       values.push(actionTaker);
     }
+    console.log('VALUES', values);
     const query = {
       name: 'update-friends',
       text:
@@ -28,6 +29,7 @@ module.exports = {
 
     pool.query(query, (err, result) => {
       if (!err) {
+        console.log('NO ERR');
         res.send(result);
       }
 
@@ -37,7 +39,7 @@ module.exports = {
           name: 'update-existing-friends',
           text:
             'UPDATE friendships\
-           SET friend_status = ($3)\
+           SET (friend_status, action_taker) = ($3, $4)\
            WHERE (person_one,person_two) = ($1, $2)',
           values
         };
