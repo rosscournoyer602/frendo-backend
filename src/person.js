@@ -86,7 +86,7 @@ module.exports = {
     });
   },
   findPerson: (req, res) => {
-    console.log('FIND', req.query);
+    console.log('FIND', req.query.search);
     const query = {
       name: 'get-person',
       text:
@@ -103,7 +103,7 @@ module.exports = {
       }
       // TODO - Better error handling
       if (!err) {
-        console.log('SEARCH RESULT', result);
+        console.log('SEARCH RESULT', result.rows);
         res.send(result);
       }
     });
