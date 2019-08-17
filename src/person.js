@@ -91,8 +91,8 @@ module.exports = {
       name: 'get-person',
       text:
         'SELECT * \
-         FROM person \
-         WHERE ($1) IN (first_name, last_name, phone, email);',
+        FROM   person \
+        WHERE  first_name ILIKE ($1) OR last_name ILIKE ($1) OR phone ILIKE ($1) OR email ILIKE ($1)',
       values: [req.query.search]
     };
 
