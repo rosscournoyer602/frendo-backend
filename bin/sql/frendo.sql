@@ -12,10 +12,10 @@ CREATE TABLE person(
     first_name VARCHAR(40) NOT NULL,
     last_name VARCHAR(40) NOT NULL,
     dob DATE NOT NULL,
-    street_address VARCHAR(50) NOT NULL,
-    city VARCHAR(40) NOT NULL,
-    state_province VARCHAR(30) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
+    street_address VARCHAR(50),
+    city VARCHAR(40),
+    state_province VARCHAR(30),
+    phone VARCHAR(20),
     email VARCHAR(40) UNIQUE REFERENCES auth_user,
     avatar_url VARCHAR(100) UNIQUE
 );
