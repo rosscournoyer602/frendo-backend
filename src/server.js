@@ -8,7 +8,11 @@ const router = require('./router');
 const app = express();
 
 app.disable('etag');
-app.use('*', cors());
+app.use(
+  cors({
+    origin: 'https://friendo.herokuapp.com'
+  })
+);
 app.use(morgan('combined'));
 app.use(bodyParser.json({ type: '*/*', limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
