@@ -31,3 +31,6 @@ CREATE TABLE friendships(
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO node_user;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO node_user;
+
+CREATE INDEX searchpeople
+ON person (first_name, last_name);
