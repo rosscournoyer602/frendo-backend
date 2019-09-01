@@ -42,7 +42,6 @@ module.exports = {
           values: [
             req.body.first_name,
             req.body.last_name,
-            req.body.dob,
             req.body.street_address,
             req.body.city,
             req.body.state_province,
