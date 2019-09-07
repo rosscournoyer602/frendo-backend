@@ -16,13 +16,12 @@ module.exports = {
       name: 'add-person',
       text:
         'INSERT INTO person\
-            (first_name, last_name, dob, street_address, city, state_province, phone, email)\
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)\
-            RETURNING first_name, last_name, dob, street_address, city, state_province, phone, avatar_url, email',
+            (first_name, last_name, street_address, city, state_province, phone, email)\
+            VALUES ($1, $2, $3, $4, $5, $6, $7)\
+            RETURNING first_name, last_name, street_address, city, state_province, phone, email',
       values: [
         req.body.first_name,
         req.body.last_name,
-        req.body.dob,
         req.body.street_address,
         req.body.city,
         req.body.state_province,
@@ -31,14 +30,15 @@ module.exports = {
       ]
     };
     pool.query(query, (err, result) => {
+      if (err) console.log(err);
       if (err && err.code === '23505') {
         const updateQuery = {
           name: 'update-person',
           text:
             'UPDATE person\
-            SET (first_name, last_name, dob, street_address, city, state_province, phone) = ($1, $2, $3, $4, $5, $6, $7)\
-            WHERE email = ($8)\
-            RETURNING first_name, last_name, dob, street_address, city, state_province, phone, avatar_url, email',
+            SET (first_name, last_name, street_address, city, state_province, phone) = ($1, $2, $3, $4, $5, $6)\
+            WHERE email = ($7)\
+            RETURNING first_name, last_name, street_address, city, state_province, phone, avatar_url, email',
           values: [
             req.body.first_name,
             req.body.last_name,
@@ -107,7 +107,7 @@ module.exports = {
       }
     });
   },
-  updateAvatar: (req, res) => {
+  updateAvatar: async (req, res) => {
     const type = req.body.data.split(';')[0].split('/')[1];
     const buffer = Buffer.from(req.body.data.replace(/^data:image\/\w+;base64,/, ''), 'base64');
     const params = {
@@ -131,32 +131,68 @@ module.exports = {
         ]
       }
     };
-    s3.deleteObjects(deleteParams, (err, data) => {
-      if (err) console.log(err);
-      else console.log(data);
-    });
-    s3.upload(params, (err, data) => {
-      if (err) {
-        res.send(err);
+    const deleteObjectsRequest = s3.deleteObjects(deleteParams);
+    try {
+      deleteObjectsRequest.promise();
+    } catch (err) {
+      res.send(err);
+    }
+    const uploadRequest = s3.upload(params);
+    try {
+      const uploadResult = await uploadRequest.promise();
+      const updateQuery = {
+        name: 'update-avatar',
+        text: `UPDATE person\
+          SET avatar_url = ($1)\
+          WHERE email = ($2)`,
+        values: [uploadResult.key, req.body.user]
+      };
+      const queryResult = await pool.query(updateQuery);
+      if (queryResult.rowCount >= 1) {
+        res.send(queryResult);
       }
-      if (!err) {
-        // res.send(data);
-        const updateQuery = {
-          name: 'update-avatar',
-          text: `UPDATE person\
-            SET avatar_url = ($1)\
-            WHERE email = ($2)`,
-          values: [data.key, req.body.user]
+      if (queryResult.rowCount === 0) {
+        const addPersonQuery = {
+          name: 'add-person',
+          text:
+            'INSERT INTO person\
+                (email, avatar_url)\
+                VALUES ($1, $2)\
+                RETURNING first_name, last_name, dob, street_address, city, state_province, phone, avatar_url, email',
+          values: [req.body.user, uploadResult.key]
         };
-        pool.query(updateQuery, (updateErr, result) => {
-          if (updateErr) {
-            console.log(updateErr);
-          }
-          if (!err) {
-            res.send(result);
-          }
-        });
+        try {
+          const addPersonQueryResult = await pool.query(addPersonQuery);
+          res.send(addPersonQueryResult);
+        } catch (err) {
+          console.log(err);
+        }
       }
-    });
+    } catch (err) {
+      console.log(err);
+    }
+    // s3.upload(params, (err, data) => {
+    //   if (err) {
+    //     res.send(err);
+    //   }
+    //   if (!err) {
+    //     // res.send(data);
+    //     const updateQuery = {
+    //       name: 'update-avatar',
+    //       text: `UPDATE person\
+    //         SET avatar_url = ($1)\
+    //         WHERE email = ($2)`,
+    //       values: [data.key, req.body.user]
+    //     };
+    //     pool.query(updateQuery, (updateErr, result) => {
+    //       if (updateErr) {
+    //         console.log(updateErr);
+    //       }
+    //       if (!err) {
+    //         res.send(result);
+    //       }
+    //     });
+    //   }
+    // });
   }
 };
