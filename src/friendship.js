@@ -2,8 +2,7 @@
 const pool = require('../db');
 
 module.exports = {
-  updateFriends: (req, res) => {
-    console.log('UPDATE', req.body);
+  updateFriends: async (req, res) => {
     const values = [];
     const { id1, id2, option, actionTaker } = req.body;
     if (id1 > id2) {
@@ -17,63 +16,53 @@ module.exports = {
       values.push(option);
       values.push(actionTaker);
     }
-    console.log('VALUES', values);
     const query = {
       name: 'update-friends',
       text:
         'INSERT INTO friendships\
-            (person_one, person_two, friend_status, action_taker)\
-            VALUES ($1, $2, $3, $4)',
+        (person_one, person_two, friend_status, action_taker)\
+        VALUES ($1, $2, $3, $4)',
       values
     };
-
-    pool.query(query, (err, result) => {
-      if (!err) {
-        console.log('NO ERR');
-        res.send(result);
-      }
-
-      if (err && err.code === '23505') {
-        console.log('ERR CONDITION');
+    try {
+      const insertFriendsResult = await pool.query(query);
+      res.send(insertFriendsResult);
+    } catch (err) {
+      if (err.code === '23505') {
         const updateQuery = {
           name: 'update-existing-friends',
           text:
             'UPDATE friendships\
-           SET (friend_status, action_taker) = ($3, $4)\
-           WHERE (person_one,person_two) = ($1, $2)',
+             SET (friend_status, action_taker) = ($3, $4)\
+             WHERE (person_one,person_two) = ($1, $2)',
           values
         };
-        pool.query(updateQuery, (updateErr, updateResult) => {
-          if (!updateErr) {
-            res.send(updateResult);
-          }
-          if (updateErr) {
-            res.send(updateErr);
-            console.log(updateErr);
-          }
-        });
+        try {
+          const updateFriendsResult = await pool.query(updateQuery);
+          res.send(updateFriendsResult);
+        } catch (updateErr) {
+          console.log(updateErr);
+        }
+      } else {
+        console.log(err);
       }
-    });
+    }
   },
-  getFriends: (req, res) => {
+  getFriends: async (req, res) => {
     const { id } = req.query;
     const query = {
       name: 'get-friends',
       text:
         'SELECT * FROM friendships\
-        INNER JOIN person ON person.person_id = friendships.person_one OR person.person_id = friendships.person_two\
-        WHERE friendships.person_one = ($1) OR friendships.person_two = ($1);',
+         INNER JOIN person ON person.person_id = friendships.person_one OR person.person_id = friendships.person_two\
+         WHERE friendships.person_one = ($1) OR friendships.person_two = ($1);',
       values: [id]
     };
-    pool.query(query, (err, result) => {
-      if (!err && result.rows) {
-        const friendsList = result.rows.filter(row => row.person_id !== parseInt(id, 10));
-        res.send(friendsList);
-      }
-      if (err) {
-        console.log(err);
-        res.send(err);
-      }
-    });
+    try {
+      const getFriendsResult = await pool.query(query);
+      res.send(getFriendsResult);
+    } catch (err) {
+      console.log(err);
+    }
   }
 };

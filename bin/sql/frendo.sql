@@ -11,7 +11,6 @@ CREATE TABLE person(
     person_id serial PRIMARY KEY,
     first_name VARCHAR(40),
     last_name VARCHAR(40),
-    dob DATE,
     street_address VARCHAR(50),
     city VARCHAR(40),
     state_province VARCHAR(30),
