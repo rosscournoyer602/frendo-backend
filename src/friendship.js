@@ -55,7 +55,7 @@ module.exports = {
       text:
         'SELECT * FROM friendships\
          INNER JOIN person ON person.person_id = friendships.person_one OR person.person_id = friendships.person_two\
-         WHERE friendships.person_one = ($1) OR friendships.person_two = ($1);',
+         WHERE person.person_id != ($1) AND friendships.person_one = ($1) OR friendships.person_two = ($1);',
       values: [id]
     };
     try {

@@ -12,7 +12,6 @@ const s3 = new AWS.S3();
 
 module.exports = {
   addPerson: async (req, res) => {
-    console.log(req.body);
     const query = {
       name: 'add-person',
       text:
@@ -118,14 +117,14 @@ module.exports = {
         ]
       }
     };
-    const deleteObjectsRequest = s3.deleteObjects(deleteParams);
     try {
+      const deleteObjectsRequest = s3.deleteObjects(deleteParams);
       deleteObjectsRequest.promise();
     } catch (err) {
       res.send(err);
     }
-    const uploadRequest = s3.upload(params);
     try {
+      const uploadRequest = s3.upload(params);
       const uploadResult = await uploadRequest.promise();
       const updateQuery = {
         name: 'update-avatar',
