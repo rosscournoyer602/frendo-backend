@@ -41,10 +41,10 @@ module.exports = {
           const updateFriendsResult = await pool.query(updateQuery);
           res.send(updateFriendsResult);
         } catch (updateErr) {
-          console.log(updateErr);
+          res.send(updateErr);
         }
       } else {
-        console.log(err);
+        res.send(err);
       }
     }
   },
@@ -62,7 +62,7 @@ module.exports = {
       const getFriendsResult = await pool.query(query);
       res.send(getFriendsResult);
     } catch (err) {
-      console.log(err);
+      res.send(err);
     }
   }
 };

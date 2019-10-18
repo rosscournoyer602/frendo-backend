@@ -55,10 +55,10 @@ module.exports = {
           const updateQueryResult = await pool.query(updateQuery);
           res.send(updateQueryResult);
         } catch (updateErr) {
-          console.log(updateErr);
+          res.send(updateErr);
         }
       } else {
-        console.log(err);
+        res.send(err);
       }
     }
   },
@@ -74,7 +74,7 @@ module.exports = {
       const getPersonResult = await pool.query(query);
       res.send(getPersonResult);
     } catch (err) {
-      console.log(err);
+      res.send(err);
     }
   },
   findPerson: async (req, res) => {
@@ -90,7 +90,7 @@ module.exports = {
       const findPersonResult = await pool.query(query);
       res.send(findPersonResult);
     } catch (err) {
-      console.log(err);
+      res.send(err);
     }
   },
   updateAvatar: async (req, res) => {
@@ -151,11 +151,11 @@ module.exports = {
           const addPersonQueryResult = await pool.query(addPersonQuery);
           res.send(addPersonQueryResult);
         } catch (err) {
-          console.log(err);
+          res.send(err);
         }
       }
     } catch (err) {
-      console.log(err);
+      res.send(err);
     }
   }
 };

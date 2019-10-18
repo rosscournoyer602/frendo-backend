@@ -14,4 +14,4 @@ app.use(bodyParser.json({ type: '*/*', limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 router(app);
 
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 3000);
