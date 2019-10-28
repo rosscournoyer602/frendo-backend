@@ -1,8 +1,8 @@
+DROP TABLE chats;
+DROP TABLE messages;
 DROP TABLE friendships;
 DROP TABLE person;
 DROP TABLE auth_user;
-DROP TABLE chats;
-DROP TABLE messages;
 
 CREATE TABLE auth_user(
 	email VARCHAR(40) PRIMARY KEY,
@@ -22,28 +22,26 @@ CREATE TABLE person(
 );
 
 CREATE TABLE friendships(
-    friendship_id serial PRIMARY KEY,
     person_one INTEGER REFERENCES person,
     person_two INTEGER REFERENCES person,
     friend_status INTEGER NOT NULL,
     action_taker INTEGER NOT NULL
-    CHECK (person_one < person_two)
+    CHECK (person_one < person_two),
+    PRIMARY KEY(person_one, person_two)
 );
 
 CREATE TABLE chats(
   chat_id serial PRIMARY KEY,
-  chat_friendship INTEGER REFERENCES friendships,
-  person_one INTEGER,
-  person_two INTEGER
-  CHECK (person_one < person_two)
+  person_one INTEGER NOT NULL,
+  person_two INTEGER NOT NULL,
+  FOREIGN KEY(person_one, person_two) REFERENCES friendships(person_one, person_two)
 );
 
 CREATE TABLE messages(
   message_id serial PRIMARY KEY,
   person_one INTEGER,
   person_two INTEGER,
-  content VARCHAR(1000),
-  CHECK (person_one < person_two)
+  content VARCHAR(1000)
 );
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO node_user;
