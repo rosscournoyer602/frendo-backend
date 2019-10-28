@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const router = require('./router');
+require('./websocket');
 
 const app = express();
 
@@ -14,4 +15,4 @@ app.use(bodyParser.json({ type: '*/*', limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 router(app);
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT);
