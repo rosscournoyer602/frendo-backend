@@ -22,25 +22,25 @@ CREATE TABLE person(
 );
 
 CREATE TABLE friendships(
+    friendship_id serial PRIMARY KEY,
     person_one INTEGER REFERENCES person,
     person_two INTEGER REFERENCES person,
     friend_status INTEGER NOT NULL,
-    action_taker INTEGER NOT NULL
+    action_taker INTEGER NOT NULL,
     CHECK (person_one < person_two),
-    PRIMARY KEY(person_one, person_two)
+    UNIQUE (person_one, person_two)
 );
 
 CREATE TABLE chats(
   chat_id serial PRIMARY KEY,
-  person_one INTEGER NOT NULL,
-  person_two INTEGER NOT NULL,
-  FOREIGN KEY(person_one, person_two) REFERENCES friendships(person_one, person_two)
+  friendship_id INTEGER UNIQUE REFERENCES friendships
 );
 
 CREATE TABLE messages(
   message_id serial PRIMARY KEY,
-  person_one INTEGER,
-  person_two INTEGER,
+  chat_id INTEGER REFERENCES chats,
+  sender INTEGER REFERENCES person,
+  receicer INTEGER REFERENCES person,
   content VARCHAR(1000)
 );
 

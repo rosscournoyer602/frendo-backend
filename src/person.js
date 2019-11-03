@@ -83,7 +83,7 @@ module.exports = {
       text:
         'SELECT * \
         FROM   person \
-        WHERE  first_name ILIKE ($1) OR last_name ILIKE ($1) OR phone ILIKE ($1) OR email ILIKE ($1)',
+        WHERE  first_name ILIKE ($1) OR last_name ILIKE ($1) OR email ILIKE ($1)',
       values: [req.query.search]
     };
     try {
