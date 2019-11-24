@@ -1,5 +1,6 @@
 /* eslint-disable no-multi-str */
 const pool = require('../db');
+const chat = require('./chat');
 
 module.exports = {
   updateFriends: async (req, res) => {
@@ -21,7 +22,8 @@ module.exports = {
       text:
         'INSERT INTO friendships\
         (person_one, person_two, friend_status, action_taker)\
-        VALUES ($1, $2, $3, $4)',
+        VALUES ($1, $2, $3, $4)\
+        RETURNING (friendship_id)',
       values
     };
     try {
@@ -34,11 +36,15 @@ module.exports = {
           text:
             'UPDATE friendships\
              SET (friend_status, action_taker) = ($3, $4)\
-             WHERE (person_one,person_two) = ($1, $2)',
+             WHERE (person_one,person_two) = ($1, $2)\
+             RETURNING friendship_id, friend_status',
           values
         };
         try {
           const updateFriendsResult = await pool.query(updateQuery);
+          if (updateFriendsResult.rows[0].friend_status === 2) {
+            chat.addChat(updateFriendsResult.rows[0].friendship_id);
+          }
           res.send(updateFriendsResult);
         } catch (updateErr) {
           res.send(updateErr);
@@ -50,7 +56,6 @@ module.exports = {
   },
   getFriends: async (req, res) => {
     const { id } = req.query;
-    console.log('ID', id);
     const query = {
       name: 'get-friends',
       text:
