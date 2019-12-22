@@ -2,8 +2,13 @@
 const pool = require('../db');
 
 module.exports = {
-  addChat: async id => {
-    const startChatValues = [id];
+  addChat: async (req, res) => {
+    let startChatValues;
+    if (typeof req === 'number') {
+      startChatValues = [req];
+    } else {
+      startChatValues = [req.query.id];
+    }
     const startChatQuery = {
       name: 'add-new-chat',
       text:
@@ -26,6 +31,32 @@ module.exports = {
       };
       try {
         pool.query(firstMessageQuery);
+      } catch (err) {
+        console.log(err);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  },
+  getChat: async (req, res) => {
+    const friendshipId = [req.query.id];
+    const getChatQuery = {
+      name: 'get-chat',
+      text: 'SELECT * FROM chats\
+        WHERE friendship_id = ($1)',
+      values: friendshipId
+    };
+    try {
+      const getChatResult = await pool.query(getChatQuery);
+      const getMessagesQuery = {
+        name: 'get-messages',
+        text: 'SELECT * FROM messages\
+        WHERE chat_id = ($1)',
+        values: [getChatResult.rows[0].chat_id]
+      };
+      try {
+        const getMessagesResult = await pool.query(getMessagesQuery);
+        res.send(getMessagesResult);
       } catch (err) {
         console.log(err);
       }

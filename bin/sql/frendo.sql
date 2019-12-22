@@ -1,5 +1,5 @@
-DROP TABLE chats;
 DROP TABLE messages;
+DROP TABLE chats;
 DROP TABLE friendships;
 DROP TABLE person;
 DROP TABLE auth_user;
@@ -40,7 +40,7 @@ CREATE TABLE messages(
   message_id serial PRIMARY KEY,
   chat_id INTEGER REFERENCES chats,
   sender INTEGER REFERENCES person,
-  receicer INTEGER REFERENCES person,
+  receiver INTEGER REFERENCES person,
   content VARCHAR(1000)
 );
 

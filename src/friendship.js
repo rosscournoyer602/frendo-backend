@@ -42,6 +42,7 @@ module.exports = {
         };
         try {
           const updateFriendsResult = await pool.query(updateQuery);
+          console.log('UFR', updateFriendsResult);
           if (updateFriendsResult.rows[0].friend_status === 2) {
             chat.addChat(updateFriendsResult.rows[0].friendship_id);
           }
