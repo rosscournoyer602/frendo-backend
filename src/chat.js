@@ -1,5 +1,6 @@
 /* eslint-disable no-multi-str */
 const pool = require('../db');
+const io = require('./websocket');
 
 module.exports = {
   addChat: async (req, res) => {
@@ -7,7 +8,7 @@ module.exports = {
     if (typeof req === 'number') {
       startChatValues = [req];
     } else {
-      startChatValues = [req.query.id];
+      startChatValues = [req.query.id, '{}'];
     }
     const startChatQuery = {
       name: 'add-new-chat',
@@ -39,5 +40,12 @@ module.exports = {
     } catch (err) {
       console.log(err);
     }
+  },
+  updateChat: async (req, res) => {
+    // need friendship id, to, from, and message
+    // get chat modify, then update
+    // then emit new chat to members of the chat
+    io.emit('message', req.body);
+    res.status(200).send();
   }
 };

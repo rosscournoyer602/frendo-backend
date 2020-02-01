@@ -10,3 +10,5 @@ io.on('connection', socket => {
 io.on('message', message => {
   console.log(message);
 });
+
+module.exports = io;
