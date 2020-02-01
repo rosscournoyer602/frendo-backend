@@ -20,20 +20,7 @@ module.exports = {
     };
     try {
       const addNewChatResult = await pool.query(startChatQuery);
-      const firstMessage = "You've added a new friend. Start chatting";
-      const firstMessageValues = [addNewChatResult.rows[0].chat_id, firstMessage];
-      const firstMessageQuery = {
-        name: 'add-first-message',
-        text: 'INSERT INTO messages\
-        (chat_id, content)\
-        VALUES ($1, $2)',
-        values: firstMessageValues
-      };
-      try {
-        pool.query(firstMessageQuery);
-      } catch (err) {
-        console.log(err);
-      }
+      res.send(addNewChatResult);
     } catch (err) {
       console.log(err);
     }
@@ -48,18 +35,7 @@ module.exports = {
     };
     try {
       const getChatResult = await pool.query(getChatQuery);
-      const getMessagesQuery = {
-        name: 'get-messages',
-        text: 'SELECT * FROM messages\
-        WHERE chat_id = ($1)',
-        values: [getChatResult.rows[0].chat_id]
-      };
-      try {
-        const getMessagesResult = await pool.query(getMessagesQuery);
-        res.send(getMessagesResult);
-      } catch (err) {
-        console.log(err);
-      }
+      res.send(getChatResult);
     } catch (err) {
       console.log(err);
     }

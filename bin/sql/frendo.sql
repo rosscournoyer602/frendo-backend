@@ -33,15 +33,8 @@ CREATE TABLE friendships(
 
 CREATE TABLE chats(
   chat_id serial PRIMARY KEY,
-  friendship_id INTEGER UNIQUE REFERENCES friendships
-);
-
-CREATE TABLE messages(
-  message_id serial PRIMARY KEY,
-  chat_id INTEGER REFERENCES chats,
-  sender INTEGER REFERENCES person,
-  receiver INTEGER REFERENCES person,
-  content VARCHAR(1000)
+  friendship_id INTEGER UNIQUE REFERENCES friendships,
+  messages TEXT
 );
 
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO node_user;
