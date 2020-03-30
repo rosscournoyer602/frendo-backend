@@ -113,6 +113,9 @@ module.exports = {
           },
           {
             Key: `64x64/${req.body.user}.${type}`
+          },
+          {
+            Key: `32x32/${req.body.user}.${type}`
           }
         ]
       }
