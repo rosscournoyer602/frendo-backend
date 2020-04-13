@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jwt-simple');
-const pool = require('../db');
+const pool = require('./db');
 
 function tokenForUser(userEmail) {
   const timestamp = new Date().getTime();
