@@ -5,6 +5,8 @@ import { AppRouter } from './AppRouter';
 import morgan from 'morgan';
 import cors from 'cors';
 import './controllers/rootController';
+import './controllers/authController';
+import './controllers/userController';
 
 const app = express();
 app.use(cors());
