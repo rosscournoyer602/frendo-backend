@@ -7,7 +7,7 @@ export class Person {
   person_id!: number;
 
   @Column()
-  first_name!: string
+  first_name?: string
 
   @Column()
   email!: string

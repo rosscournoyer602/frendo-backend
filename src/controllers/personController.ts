@@ -7,8 +7,6 @@ import { Person } from '../entity/Person';
 @controller('')
 class UserController {
 
-  
-
   @get('/person')
   async getPerson(req: Request, res: Response) {
     const people = await getConnection('default').manager.find(Person);
