@@ -83,7 +83,7 @@ module.exports = {
       text:
         'SELECT * \
         FROM person \
-        WHERE first_name ILIKE ($1) OR last_name ILIKE ($1) OR phone ILIKE ($1) OR email ILIKE ($1)',
+        WHERE first_name ILIKE ($1) OR last_name ILIKE ($1) OR email ILIKE ($1)',
       values: [req.query.search]
     };
     try {
@@ -98,7 +98,7 @@ module.exports = {
     const buffer = Buffer.from(req.body.data.replace(/^data:image\/\w+;base64,/, ''), 'base64');
     const params = {
       Bucket: 'friendo2',
-      Key: `${req.body.user}.${type}`,
+      Key: `${req.body.user}${Date.now()}.${type}`,
       Body: buffer,
       ACL: 'public-read',
       ContentEncoding: 'base64',
@@ -109,13 +109,13 @@ module.exports = {
       Delete: {
         Objects: [
           {
-            Key: `200x200/${req.body.user}.${type}`
+            Key: `200x200/${req.body.currentAvatar}`
           },
           {
-            Key: `64x64/${req.body.user}.${type}`
+            Key: `64x64/${req.body.currentAvatar}`
           },
           {
-            Key: `32x32/${req.body.user}.${type}`
+            Key: `32x32/${req.body.currentAvatar}`
           }
         ]
       }
