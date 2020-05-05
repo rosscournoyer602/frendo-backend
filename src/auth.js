@@ -11,31 +11,21 @@ function tokenForUser(userEmail) {
 
 module.exports = {
   signup: (req, res) => {
-    pool
-      .connect()
-      .then(client => {
-        bcrypt.genSalt(10, (err, salt) => {
-          bcrypt.hash(req.body.password, salt, null, (err, hash) => {
-            const addPersonQuery = 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)';
-            const addUserParams = [req.body.email, hash];
-            client
-              .query(addPersonQuery, addUserParams)
-              .then(() => {
-                tokenForUser();
-                res.status(200).json({ token: tokenForUser(req.body.email) });
-                client.release();
-              })
-              .catch(err => {
-                res.send(err);
-                client.release();
-              });
-          });
-        });
-      })
-      .catch(err => {
-        res.send(`Encountered unknown error: ${err}`);
-        // client.release();
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(req.body.password, salt, null, async (err, hash) => {
+        const query = {
+          name: 'signup-user',
+          text: 'INSERT INTO auth_user (email, password_hash) VALUES ($1, $2)',
+          values: [req.body.email, hash]
+        };
+        try {
+          await pool.query(query);
+          res.status(200).json({ token: tokenForUser(req.body.email) });
+        } catch (error) {
+          res.status(400).send('Duplicate email');
+        }
       });
+    });
   },
   signin: (req, res) => {
     // user has had their email and password authed using passport.js local strategy
