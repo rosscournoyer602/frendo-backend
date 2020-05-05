@@ -6,16 +6,16 @@ module.exports = {
   addChat: async (req, res) => {
     let startChatValues;
     if (typeof req === 'number') {
-      startChatValues = [req];
+      startChatValues = [req, '[]'];
     } else {
-      startChatValues = [req.query.id, '{}'];
+      startChatValues = [req.query.id, '[]'];
     }
     const startChatQuery = {
       name: 'add-new-chat',
       text:
         'INSERT INTO chats\
-        (friendship_id)\
-        VALUES ($1)\
+        (friendship_id, messages)\
+        VALUES ($1, $2)\
         RETURNING chat_id',
       values: startChatValues
     };

@@ -33,5 +33,5 @@ module.exports = app => {
 
   app.get('/getchat', requireAuth, getChat);
 
-  app.put('/chatupdate', requireAuth, updateChat);
+  app.post('/updatechat', requireAuth, updateChat);
 };

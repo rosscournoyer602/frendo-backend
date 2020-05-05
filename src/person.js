@@ -84,7 +84,7 @@ module.exports = {
         'SELECT * \
         FROM person \
         WHERE first_name ILIKE ($1) OR last_name ILIKE ($1) OR email ILIKE ($1)',
-      values: [req.query.search]
+      values: [`%${req.query.search}%`]
     };
     try {
       const findPersonResult = await pool.query(query);
