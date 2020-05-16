@@ -31,12 +31,12 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
           });
         })
         .catch(err => {
-          res.send(err);
+          result.send(err);
           client.release();
         });
     })
     .catch(err => {
-      res.send(err);
+      console.log(err);
     });
 });
 const jwtOptions = {

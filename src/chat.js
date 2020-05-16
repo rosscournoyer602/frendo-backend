@@ -42,10 +42,24 @@ module.exports = {
     }
   },
   updateChat: async (req, res) => {
-    // need friendship id, to, from, and message
-    // get chat modify, then update
-    // then emit new chat to members of the chat
-    io.emit('message', req.body);
-    res.status(200).send();
+    const { friendship, messages } = req.body;
+    // eslint-disable-next-line no-unused-vars
+    const updateChatQuery = {
+      name: 'update-chat',
+      text:
+        'UPDATE chats \
+        SET (messages) = row($2) \
+        WHERE friendship_id = ($1) \
+        RETURNING messages',
+      values: [friendship, messages]
+    };
+    try {
+      const updateChatResult = await pool.query(updateChatQuery);
+      const updatedMessages = updateChatResult.rows[0];
+      io.emit(`message${friendship}`, updatedMessages);
+      res.status(200).send();
+    } catch (error) {
+      console.log(error);
+    }
   }
 };

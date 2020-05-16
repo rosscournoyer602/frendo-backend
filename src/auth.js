@@ -28,6 +28,7 @@ module.exports = {
     });
   },
   signin: (req, res) => {
+    console.log('req', req.body);
     // user has had their email and password authed using passport.js local strategy
     // we just need to give them a token
     res.send({ token: tokenForUser(req.user) });
