@@ -1,4 +1,6 @@
-const io = require('socket.io')(8080);
+const io = require('socket.io')(8080, {
+  path: '/'
+});
 
 io.set('origins', '*:*');
 io.on('connection', socket => {

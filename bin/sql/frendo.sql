@@ -1,4 +1,3 @@
-DROP TABLE messages;
 DROP TABLE chats;
 DROP TABLE friendships;
 DROP TABLE person;
