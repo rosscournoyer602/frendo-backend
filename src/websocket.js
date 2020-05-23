@@ -1,4 +1,4 @@
-const io = require('socket.io')(process.env.socketport || 8080);
+const io = require('socket.io')(process.env.PORT);
 
 io.set('origins', '*:*');
 io.on('connection', socket => {
