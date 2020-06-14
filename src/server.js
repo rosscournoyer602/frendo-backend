@@ -17,7 +17,7 @@ app.use(bodyParser.json({ type: '*/*', limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 router(app);
 const io = socketIO.getInstance(server);
-io.set('origins', 'http://friendo.herokuapp.com');
+io.set('origins', '*:*');
 io.on('connection', socket => {
   socket.emit('message', 'Hey Client!');
   socket.on('message', message => {
