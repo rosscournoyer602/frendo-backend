@@ -11,7 +11,7 @@ const app = express();
 const server = require('http').Server(app);
 
 app.disable('etag');
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: 'http://friendo.herokuapp.com', credentials: true }));
 app.use(morgan('combined'));
 app.use(bodyParser.json({ type: '*/*', limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
