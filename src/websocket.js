@@ -1,14 +1,14 @@
-const io = require('socket.io')(8080);
+const socketIO = require('socket.io');
 
-io.set('origins', '*:*');
-io.on('connection', socket => {
-  socket.emit('message', 'Hey Client!');
-  socket.on('message', message => {
-    console.log(message);
-  });
-});
-io.on('message', message => {
-  console.log(message);
-});
+let websocket = null;
 
-module.exports = io;
+class WebSocket {
+  static getInstance(app) {
+    if (app && !websocket) {
+      websocket = socketIO(app);
+    }
+    return websocket;
+  }
+}
+
+module.exports = WebSocket;

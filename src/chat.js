@@ -43,7 +43,7 @@ module.exports = {
   },
   updateChat: async (req, res) => {
     const { friendship, messages } = req.body;
-    // eslint-disable-next-line no-unused-vars
+    const socket = io.getInstance();
     const updateChatQuery = {
       name: 'update-chat',
       text:
@@ -56,7 +56,7 @@ module.exports = {
     try {
       const updateChatResult = await pool.query(updateChatQuery);
       const updatedMessages = updateChatResult.rows[0];
-      io.emit(`message${friendship}`, updatedMessages);
+      socket.emit(`message${friendship}`, updatedMessages);
       res.status(200).send();
     } catch (error) {
       console.log(error);
