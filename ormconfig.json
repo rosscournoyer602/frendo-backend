@@ -2,9 +2,9 @@
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
-  "username": "node_user",
-  "password": "node_user",
-  "database": "friendo",
+  "username": "Ross",
+  "password": "password",
+  "database": "tsed",
   "synchronize": true,
   "logging": false,
   "entities": [

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { AuthUser } from './AuthUser'
 
 @Entity()
 export class Person {
@@ -9,6 +10,7 @@ export class Person {
   @Column()
   first_name?: string
 
-  @Column()
+	@Column()
+	@OneToOne(type => AuthUser)
   email!: string
 }
