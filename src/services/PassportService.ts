@@ -1,17 +1,22 @@
 import { Request, Response } from 'express';
 import { Strategy, ExtractJwt, VerifiedCallback } from 'passport-jwt'
+import passportLocal from "passport-local";
 import passport from 'passport';
+import bcrypt from 'bcrypt'
 import {getRepository } from 'typeorm';
 import { AuthUser } from '../entity/AuthUser';
+
+const LocalStrategy = passportLocal.Strategy
 
 export class PassportService {
 
 	public initialize = () => {
-		passport.use('jwt', this.getStrategy())
+		passport.use('jwt', this.getJwtStrategy())
+		passport.use('local', this.getLocalStrategy())
 		return passport.initialize()
 	}
 
-	private getStrategy = (): Strategy => {
+	private getJwtStrategy = (): Strategy => {
 		const params = {
 			secretOrKey: process.env.JWT_SECRET,
 			jwtFromRequest: ExtractJwt.fromAuthHeader(),
@@ -31,5 +36,30 @@ export class PassportService {
 			}
 		})
 
+	}
+
+	private getLocalStrategy = (): Strategy => {
+		return new LocalStrategy({ usernameField: "email"}, async (email: string, password: string, done: VerifiedCallback) => {
+			try {
+				const user = await getRepository(AuthUser).findOne({ email });
+				if (!user) {
+					done(null, false)
+				} else {
+					bcrypt.compare(password, user.password, (err, compare: boolean) => {
+						if (compare === true) {
+              done(null, user);
+            }
+            if (compare === false) {
+              done(null, false);
+						}
+						if (err) {
+							done(err, false)
+						}
+					})
+				}
+			} catch (err) {
+				console.log(err)
+			}
+		})
 	}
 }
