@@ -3,7 +3,7 @@ import { get, post, controller, use } from './decorators';
 import { signIn } from '../middleware/requireSignin'
 
 function logger(req: Request, res: Response, next: NextFunction) {
-	console.log('Signin', req.body)
+	console.log('Log', req.body)
 	next();
 }
 
@@ -15,8 +15,8 @@ class AuthController {
   }
 
 	@post('/signin')
+	@use(signIn)
 	@use(logger)
-  @use(signIn)
   signin (req: Request, res: Response): void {
 	console.log('REQBODY', req.body)
 	res.send('ok')
