@@ -1,13 +1,17 @@
 import { RequestHandler,Request, Response, NextFunction } from 'express'
-const passport = require('passport');
+import passport from 'passport'
+import '../services/PassportService'
 
-export function signIn(): RequestHandler {
-  return function(req: Request, res: Response, next: NextFunction) {
-    const requireSignin = passport.authenticate('local', { session: false });
-    if (!requireSignin) {
-      res.send('Authentication Error');
-    } else {
-      next();
-    }
-  }
+
+export function signIn(req: Request, res: Response, next: NextFunction) {
+	console.log('PPOER', passport)
+		passport.authenticate('local', { session: false }, (req, res) => {
+			console.log('REQIRE', req.body)
+		})
+    // if (!requireSignin) {
+		// 	res.send('Authentication Error');
+		// 	next();
+    // } else {
+    //   next();
+    // }
 }

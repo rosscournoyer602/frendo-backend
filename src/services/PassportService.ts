@@ -8,58 +8,44 @@ import { AuthUser } from '../entity/AuthUser';
 
 const LocalStrategy = passportLocal.Strategy
 
-export class PassportService {
-
-	public initialize = () => {
-		passport.use('jwt', this.getJwtStrategy())
-		passport.use('local', this.getLocalStrategy())
-		return passport.initialize()
-	}
-
-	private getJwtStrategy = (): Strategy => {
-		const params = {
-			secretOrKey: process.env.JWT_SECRET,
-			jwtFromRequest: ExtractJwt.fromAuthHeader(),
-			passReqToCallback: true
+passport.use(new LocalStrategy({ usernameField: "email"}, async (email: string, password: string, done: VerifiedCallback) => {
+	try {
+		const user = await getRepository(AuthUser).findOne({ email });
+		if (!user) {
+			done(null, false)
+		} else {
+			bcrypt.compare(password, user.password, (err, compare: boolean) => {
+				 if (compare === true) {
+					done(null, user);
+				}
+				if (compare === false) {
+					done(null, false);
+				}
+				if (err) {
+					done(err, false)
+				}
+			})
 		}
-
-		return new Strategy(params, async (payload: any, done: VerifiedCallback) => {
-			try {
-				const user = await getRepository(AuthUser).findOne({ email: payload });
-				if (user) {
-					done(null, user)
-				} else {
-					done(null, false)
-				}
-			} catch (err) {
-				done(err, false)
-			}
-		})
-
+	} catch (err) {
+		console.log(err)
 	}
+}))
 
-	private getLocalStrategy = (): Strategy => {
-		return new LocalStrategy({ usernameField: "email"}, async (email: string, password: string, done: VerifiedCallback) => {
-			try {
-				const user = await getRepository(AuthUser).findOne({ email });
-				if (!user) {
-					done(null, false)
-				} else {
-					bcrypt.compare(password, user.password, (err, compare: boolean) => {
-						if (compare === true) {
-              done(null, user);
-            }
-            if (compare === false) {
-              done(null, false);
-						}
-						if (err) {
-							done(err, false)
-						}
-					})
-				}
-			} catch (err) {
-				console.log(err)
-			}
-		})
-	}
+const params = {
+	secretOrKey: process.env.SECRET,
+	jwtFromRequest: ExtractJwt.fromHeader('Authorization'),
+	passReqToCallback: true
 }
+
+passport.use(new Strategy(params, async (payload: any, done: VerifiedCallback) => {
+	try {
+		const user = await getRepository(AuthUser).findOne({ email: payload });
+		if (user) {
+			done(null, user)
+		} else {
+			done(null, false)
+		}
+	} catch (err) {
+		done(err, false)
+	}
+}))
