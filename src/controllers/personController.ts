@@ -16,8 +16,8 @@ class UserController {
 	
 	@get('/person')
   async getPerson(req: Request, res: Response) {
-		const person_id = req.query.id as string
-    const people = await getRepository(Person).findOne(person_id);
+		const id = req.query.id as string
+    const people = await getRepository(Person).findOne(id);
     res.send(people);
   }
 
