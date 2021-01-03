@@ -2,23 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import { get, post, controller, use } from './decorators';
 import { signIn } from '../middleware/requireSignin'
 
-function logger(req: Request, res: Response, next: NextFunction) {
-	console.log('Log', req.body)
-	next();
-}
-
 @controller('')
 class AuthController {
   @post('/signup')
   signup (req: Request, res: Response): void {
-
+		// check if there is already one
+		// if not, add one
+		// give user a token
   }
 
 	@post('/signin')
 	@use(signIn)
-	@use(logger)
   signin (req: Request, res: Response): void {
-	console.log('REQBODY', req.body)
 	res.send('ok')
   //   // user has had their email and password authed using passport.js local strategy
   //   // we just need to give them a token

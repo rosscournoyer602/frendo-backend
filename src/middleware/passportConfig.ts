@@ -9,14 +9,12 @@ import { AuthUser } from '../entity/AuthUser';
 const LocalStrategy = passportLocal.Strategy
 
 passport.use(new LocalStrategy({ usernameField: "email"}, async (email: string, password: string, done: VerifiedCallback) => {
-	console.log('EMAIL', email)
 	try {
 		const user = await getRepository(AuthUser).findOne({ email });
-		console.log('USER', user)
 		if (!user) {
-			done(null, false)
+			return done(undefined, false, { message: `Email ${email} not found.` });
 		} else {
-			bcrypt.compare(password, user.password, (err, compare: boolean) => {
+			bcrypt.compare(password, user.password, (err, compare: boolean): void => {
 				 if (compare === true) {
 					done(null, user);
 				}
