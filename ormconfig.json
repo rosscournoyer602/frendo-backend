@@ -6,7 +6,7 @@
   "password": "password",
   "database": "tsed",
   "synchronize": true,
-  "logging": false,
+  "logging": "schema",
   "entities": [
     "build/entity/*.js"
   ],

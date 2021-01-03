@@ -5,12 +5,8 @@ import { AuthUser } from './AuthUser'
 export class Person {
 
   @PrimaryGeneratedColumn()
-  person_id!: number;
+  id!: number;
 
-  @Column()
-  first_name?: string
-
-	@Column()
-	@OneToOne(type => AuthUser)
-  email!: string
+  @Column('text', { nullable: true })
+  first_name?: string;
 }

@@ -3,7 +3,7 @@ import { Strategy, ExtractJwt, VerifiedCallback } from 'passport-jwt'
 import passportLocal from "passport-local";
 import passport from 'passport';
 import bcrypt from 'bcrypt'
-import {getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import { AuthUser } from '../entity/AuthUser';
 
 const LocalStrategy = passportLocal.Strategy

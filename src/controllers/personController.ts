@@ -14,17 +14,17 @@ class UserController {
 	
 	@get('/person')
   async getPerson(req: Request, res: Response) {
-		const email = req.query.email as string
-    const people = await getRepository(Person).findOne({ email });
+		const person_id = req.query.id as string
+    const people = await getRepository(Person).findOne(person_id);
     res.send(people);
   }
 
-  @post('/person')
-  async addPerson(req: Request, res: Response) {
-    const newPerson = new Person();
-    newPerson.email = req.body.email;
-    newPerson.first_name = req.body.first_name;
-    await getConnection('default').manager.save(newPerson);
-    res.send(newPerson);
-  }
+  // @post('/person')
+  // async addPerson(req: Request, res: Response) {
+  //   const newPerson = new Person();
+  //   newPerson.email = req.body.email;
+  //   newPerson.first_name = req.body.first_name;
+  //   await getConnection('default').manager.save(newPerson);
+  //   res.send(newPerson);
+  // }
 }
