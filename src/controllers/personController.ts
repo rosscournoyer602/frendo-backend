@@ -7,6 +7,7 @@ import { checkToken } from '../middleware/requireSignin'
 
 @controller('')
 class UserController {
+
 	@get('/people')
 	@use(checkToken)
   async getPeople(req: Request, res: Response) {
@@ -15,18 +16,11 @@ class UserController {
 	}
 	
 	@get('/person')
+	@use(checkToken)
   async getPerson(req: Request, res: Response) {
 		const id = req.query.id as string
     const people = await getRepository(Person).findOne(id);
     res.send(people);
-  }
+	}
 
-  // @post('/person')
-  // async addPerson(req: Request, res: Response) {
-  //   const newPerson = new Person();
-  //   newPerson.email = req.body.email;
-  //   newPerson.first_name = req.body.first_name;
-  //   await getConnection('default').manager.save(newPerson);
-  //   res.send(newPerson);
-  // }
 }

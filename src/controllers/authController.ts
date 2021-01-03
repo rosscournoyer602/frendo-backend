@@ -42,7 +42,6 @@ class AuthController {
 			} catch (err) {
 				res.status(500).send('An unexpected error has occured')
 			}
-			
 		}
   }
 
@@ -50,10 +49,8 @@ class AuthController {
 	//todo validate body middleware
 	@use(signIn)
   async signin(req: Request, res: Response) {
-	const { email } = req.body
-	res.send({ token: tokenForUser(email) })
-  //   // user has had their email and password authed using passport.js local strategy
-  //   // we just need to give them a token
-  //   res.send({ token: tokenForUser(req.body.user) });
-  }
+		const { email } = req.body
+		res.send({ token: tokenForUser(email) })
+	}
+
 }

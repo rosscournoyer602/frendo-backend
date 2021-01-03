@@ -15,8 +15,6 @@ createConnection().then(() => {
   app.use(morgan('combined'));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json({ type: '*/*' }));
-  // app.use(cookieSession({ keys: ['qwerty'] }));
   app.use(AppRouter.getInstance());
-
   app.listen(process.env.PORT);
 });
