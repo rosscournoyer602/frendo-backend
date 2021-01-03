@@ -26,8 +26,8 @@ passport.use(new LocalStrategy({ usernameField: "email"}, async (email: string, 
 				}
 			})
 		}
-	} catch (err) {
-		console.log(err)
+	} catch (e) {
+		done(e, false)
 	}
 }))
 
