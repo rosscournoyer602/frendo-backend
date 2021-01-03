@@ -33,13 +33,12 @@ passport.use(new LocalStrategy({ usernameField: "email"}, async (email: string, 
 
 const params = {
 	secretOrKey: process.env.SECRET,
-	jwtFromRequest: ExtractJwt.fromHeader('Authorization'),
-	passReqToCallback: true
+	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 }
 
 passport.use(new Strategy(params, async (payload: any, done: VerifiedCallback) => {
 	try {
-		const user = await getRepository(AuthUser).findOne({ email: payload });
+		const user = await getRepository(AuthUser).findOne({ email: payload.sub });
 		if (user) {
 			done(null, user)
 		} else {

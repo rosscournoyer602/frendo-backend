@@ -14,3 +14,17 @@ export function signIn(req: Request, res: Response, next: NextFunction) {
 		}
 	})(req, res, next)
 }
+
+export function checkToken(req: Request, res: Response, next: NextFunction) {
+	console.log('Payloaddasdasd', req.headers)
+	passport.authenticate('jwt', (err, user, info) => {
+		if (err) {
+			res.status(401).json({ status: "error", code: "errr" });
+		}
+		if (!user) {
+			res.status(401).json({ status: "error", code: "not usre" });
+		} else {
+			next();
+		}
+	})(req, res, next)
+}
