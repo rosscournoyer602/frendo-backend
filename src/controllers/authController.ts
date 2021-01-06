@@ -6,6 +6,7 @@ import { signIn } from '../middleware/requireSignin'
 import { getRepository } from 'typeorm'
 import { AuthUser } from '../entity/AuthUser'
 import { Person } from '../entity/Person'
+import { bodyValidator } from '../middleware/requestValidator'
 
 function tokenForUser(userEmail: string) {
   const timestamp = new Date().getTime() / 1000;
@@ -15,12 +16,16 @@ function tokenForUser(userEmail: string) {
 @controller('')
 class AuthController {
 
-  @post('/signup')
+	@post('/signup')
+	@use(bodyValidator(['email, password, confirmPassword']))
   async signup (req: Request, res: Response) {
 		const { email } = req.body
 		const userRepo = getRepository(AuthUser)
 		const personRepo = getRepository(Person)
 		const user = await userRepo.findOne({ email })
+		if (req.body.password !== req.body.confirmPassword) {
+			res.status(422).send('Passwords do not match')
+		}
 		if (user) {
 			res.status(409).send(`User already exists with id: ${email}`)
 		} else {

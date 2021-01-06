@@ -1,4 +1,4 @@
-import { Entity, Column, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { AuthUser } from './AuthUser'
 
 @Entity()
@@ -8,5 +8,5 @@ export class Person {
   id!: number;
 
   @Column('text', { nullable: true })
-  first_name?: string;
+	first_name?: string;
 }

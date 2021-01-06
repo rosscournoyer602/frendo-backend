@@ -16,7 +16,6 @@
   "license": "ISC",
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
-    "@types/bcrypt-nodejs": "0.0.31",
     "@types/body-parser": "^1.19.0",
     "@types/cookie-session": "^2.0.39",
     "@types/cors": "^2.8.6",
@@ -37,7 +36,7 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "pg": "^7.4.3",
+    "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "socket.io": "^2.3.0",
     "typeorm": "^0.2.24"
