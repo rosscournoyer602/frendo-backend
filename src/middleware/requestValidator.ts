@@ -1,5 +1,4 @@
 import { RequestHandler,Request, Response, NextFunction } from 'express'
-import { runInNewContext } from 'vm'
 
 export function bodyValidator(keys: string[]): RequestHandler {
 	return function(req: Request, res: Response, next: NextFunction) {
