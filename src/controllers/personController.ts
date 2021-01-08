@@ -6,7 +6,7 @@ import { checkToken } from '../middleware/requireSignin'
 
 
 @controller('')
-class UserController {
+class PersonController {
 
 	@get('/people')
 	@use(checkToken)

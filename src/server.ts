@@ -8,6 +8,7 @@ import { createConnection } from 'typeorm';
 import './controllers/rootController';
 import './controllers/authController';
 import './controllers/personController';
+import './controllers/friendController';
 
 createConnection().then(() => {
   const app = express();

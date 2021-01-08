@@ -6,7 +6,7 @@ import { signIn } from '../middleware/requireSignin'
 import { getRepository } from 'typeorm'
 import { AuthUser } from '../entity/AuthUser'
 import { Person } from '../entity/Person'
-import { bodyValidator } from '../middleware/requestValidator'
+import { requestValidator } from '../middleware/requestValidator'
 
 function tokenForUser(userEmail: string) {
   const timestamp = new Date().getTime() / 1000;
@@ -17,7 +17,7 @@ function tokenForUser(userEmail: string) {
 class AuthController {
 
 	@post('/signup')
-	@use(bodyValidator(['email, password, confirmPassword']))
+	@use(requestValidator(['email', 'password', 'confirmPassword']))
   async signup (req: Request, res: Response) {
 		const { email } = req.body
 		const userRepo = getRepository(AuthUser)
@@ -32,6 +32,7 @@ class AuthController {
 			try {
 				bcrypt.hash(req.body.password, 10, async (err, hash) => {
 					if (err) {
+						console.log(err)
 						res.status(500).send('An unexpected error has occured')
 					}
 					const newPerson = await personRepo.save({})
@@ -51,7 +52,7 @@ class AuthController {
   }
 
 	@post('/signin')
-	//todo validate body middleware
+	@use(requestValidator(['email', 'password']))
 	@use(signIn)
   async signin(req: Request, res: Response) {
 		const { email } = req.body

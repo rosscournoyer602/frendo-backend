@@ -18,3 +18,4 @@ function routeBinder(method: string) {
 
 export const get = routeBinder(Methods.Get);
 export const post = routeBinder(Methods.Post);
+export const put = routeBinder(Methods.Put);

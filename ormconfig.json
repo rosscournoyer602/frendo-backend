@@ -5,7 +5,7 @@
   "username": "Ross",
   "password": "password",
   "database": "tsed",
-  "synchronize": false,
+  "synchronize": true,
   "logging": "schema",
   "entities": [
     "build/entity/*.js"

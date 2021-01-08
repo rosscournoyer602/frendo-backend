@@ -1,4 +1,3 @@
-import { Request, Response } from 'express';
 import { Strategy, ExtractJwt, VerifiedCallback } from 'passport-jwt'
 import passportLocal from "passport-local";
 import passport from 'passport';
