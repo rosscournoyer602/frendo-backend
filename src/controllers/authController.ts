@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { get, post, controller, use } from './decorators'
 import { signIn } from '../middleware/requireSignin'
 import { getRepository } from 'typeorm'
-import { AuthUser } from '../entity/AuthUser'
+import { User } from '../entity/User'
 import { Person } from '../entity/Person'
 import { requestValidator } from '../middleware/requestValidator'
 
@@ -20,7 +20,7 @@ class AuthController {
 	@use(requestValidator(['email', 'password', 'confirmPassword']))
   async signup (req: Request, res: Response) {
 		const { email } = req.body
-		const userRepo = getRepository(AuthUser)
+		const userRepo = getRepository(User)
 		const personRepo = getRepository(Person)
 		const user = await userRepo.findOne({ email })
 		if (req.body.password !== req.body.confirmPassword) {

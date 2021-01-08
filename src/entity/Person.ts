@@ -1,12 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
-import { AuthUser } from './AuthUser'
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
 export class Person {
 
   @PrimaryGeneratedColumn()
-  id!: number;
+  id!: number
 
   @Column('text', { nullable: true })
-	first_name?: string;
+	firstName?: string
+
+	@Column('text', { nullable: true })
+	avatar?: string
+
 }

@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryColumn, OneToOne, JoinColumn } from "typeorm";
 import { Person } from './Person'
 
 @Entity()
-export class AuthUser {
+export class User {
 
 	@PrimaryColumn()
   email!: string;

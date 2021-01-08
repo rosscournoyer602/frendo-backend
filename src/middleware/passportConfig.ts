@@ -3,13 +3,13 @@ import passportLocal from "passport-local";
 import passport from 'passport';
 import bcrypt from 'bcrypt'
 import { getRepository } from 'typeorm';
-import { AuthUser } from '../entity/AuthUser';
+import { User } from '../entity/User';
 
 const LocalStrategy = passportLocal.Strategy
 
 passport.use(new LocalStrategy({ usernameField: "email"}, async (email: string, password: string, done: VerifiedCallback) => {
 	try {
-		const user = await getRepository(AuthUser).findOne({ email });
+		const user = await getRepository(User).findOne({ email });
 		if (!user) {
 			return done(undefined, false, { message: `Email ${email} not found.` });
 		} else {
@@ -37,7 +37,7 @@ const params = {
 
 passport.use(new Strategy(params, async (payload: any, done: VerifiedCallback) => {
 	try {
-		const user = await getRepository(AuthUser).findOne({ email: payload.sub });
+		const user = await getRepository(User).findOne({ email: payload.sub });
 		if (user) {
 			done(null, user)
 		} else {

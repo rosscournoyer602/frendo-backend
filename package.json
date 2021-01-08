@@ -23,7 +23,7 @@
     "@types/morgan": "^1.9.0",
     "@types/node": "^13.11.1",
     "@types/passport-local": "^1.0.33",
-    "aws-sdk": "^2.409.0",
+    "aws-sdk": "^2.824.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "concurrently": "^5.1.0",
