@@ -13,7 +13,7 @@ import './controllers/friendController';
 createConnection().then(() => {
   const app = express();
 	app.use(cors());
-  app.use(morgan('combined'));
+  app.use(morgan(':method :url :status :response-time ms'));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json({ type: '*/*' }));
   app.use(AppRouter.getInstance());

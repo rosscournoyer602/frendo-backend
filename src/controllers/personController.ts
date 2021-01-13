@@ -85,7 +85,7 @@ class PersonController {
 			avatar: avatar || null
 		}
 		try {
-			const result = repo.save(personData)
+			const result = await repo.save(personData)
 			res.status(200).send(result)
 		} catch (err) {
 			console.log(err)

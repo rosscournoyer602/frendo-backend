@@ -9,7 +9,7 @@ const LocalStrategy = passportLocal.Strategy
 
 passport.use(new LocalStrategy({ usernameField: "email"}, async (email: string, password: string, done: VerifiedCallback) => {
 	try {
-		const user = await getRepository(User).findOne({ email });
+		const user = await getRepository(User).findOne({ where: { email }, relations: ['person']  });
 		if (!user) {
 			return done(undefined, false, { message: `Email ${email} not found.` });
 		} else {
@@ -37,7 +37,7 @@ const params = {
 
 passport.use(new Strategy(params, async (payload: any, done: VerifiedCallback) => {
 	try {
-		const user = await getRepository(User).findOne({ email: payload.sub });
+		const user = await getRepository(User).findOne({ where: { email: payload.sub }, relations: ['person']});
 		if (user) {
 			done(null, user)
 		} else {

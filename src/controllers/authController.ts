@@ -24,7 +24,7 @@ class AuthController {
 		const personRepo = getRepository(Person)
 		const user = await userRepo.findOne({ email })
 		if (req.body.password !== req.body.confirmPassword) {
-			res.status(422).send('Passwords do not match')
+			res.send('Passwords do not match')
 		}
 		if (user) {
 			res.status(409).send(`User already exists with id: ${email}`)
@@ -36,12 +36,13 @@ class AuthController {
 						res.status(500).send('An unexpected error has occured')
 					}
 					const newPerson = await personRepo.save({})
-					await userRepo.save({
+					const newUser = await userRepo.save({
 						email: req.body.email,
 						password: hash,
 						person: newPerson
 					})
 					res.status(200).send({
+						...newUser,
 						token: tokenForUser(email)
 					})
 				})
@@ -55,8 +56,7 @@ class AuthController {
 	@use(requestValidator(['email', 'password']))
 	@use(signIn)
   async signin(req: Request, res: Response) {
-		const { email } = req.body
-		res.send({ token: tokenForUser(email) })
+		res.send({ token: tokenForUser(res.locals.user.email), user: res.locals.user })
 	}
 
 }
