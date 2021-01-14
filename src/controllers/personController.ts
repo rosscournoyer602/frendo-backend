@@ -38,6 +38,7 @@ class PersonController {
 	async addPerson(req: Request, res: Response) {
 		const repo = getRepository(Person)
 		var { id, firstName, avatar, prevAvatar} = req.body
+		// update avatar in AWS S3 bucket
 		if (avatar) {
 			const type = avatar.split(';')[0].split('/')[1]
 			const buffer = Buffer.from(avatar.replace(/^data:image\/\w+;base64,/, ''), 'base64')
@@ -62,7 +63,7 @@ class PersonController {
 					}
 				};
 				try {
-					const deleteResults = await s3.deleteObjects(deleteParams)
+					const deleteResults = await s3.deleteObjects(deleteParams).promise()
 					console.log(deleteResults)
 				} catch (err) {
 					console.log(err)
@@ -79,10 +80,11 @@ class PersonController {
 				res.status(500).send('An unexpected error has occured')
 			}
 		}
+		
 		const personData = {
 			id, 
 			firstName: firstName || null,
-			avatar: avatar || null
+			avatar: avatar || prevAvatar
 		}
 		try {
 			const result = await repo.save(personData)

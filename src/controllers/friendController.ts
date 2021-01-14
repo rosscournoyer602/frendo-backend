@@ -1,8 +1,9 @@
-import { Request, Response, } from 'express';
-import { get, put, post, controller, use } from './decorators';
-import { getRepository } from 'typeorm';
+import { Request, Response, } from 'express'
+import { get, put, post, controller, use } from './decorators'
+import { getRepository } from 'typeorm'
 import { checkToken } from '../middleware/requireSignin'
 import { Friendship } from '../entity/Friendship'
+import { Person } from '../entity/Person'
 import { requestValidator } from '../middleware/requestValidator'
 
 @controller('')
@@ -12,11 +13,12 @@ class FriendshipController {
 	@use(checkToken)
 	async getFriends(req: Request, res: Response) {
 		const { id } = req.query
-    const friends = await getRepository(Friendship).find({
-			where: [
-				{ personOne: id},
-				{ personTwo: id}
-			]
+		const friends = await getRepository(Friendship).find({
+				where: [
+					{ personOne: id},
+					{ personTwo: id}
+				],
+				relations: ['personOne', 'personTwo']
 		})
     res.send(friends);
 	}
