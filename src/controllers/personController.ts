@@ -20,16 +20,25 @@ class PersonController {
 	@get('/people')
 	@use(checkToken)
   async getPeople(req: Request, res: Response) {
-    const people = await getConnection('default').manager.find(Person);
-    res.send(people);
+		try {
+			const people = await getConnection('default').manager.find(Person);
+			res.status(200).send(people);
+		} catch (err) {
+			console.log(err)
+			res.status(500).send('An unexpected error has occured')
+		}
 	}
 	
 	@get('/person')
 	@use(checkToken)
   async getPerson(req: Request, res: Response) {
 		const id = req.query.id as string
-    const people = await getRepository(Person).findOne(id);
-    res.send(people);
+		try {
+			const people = await getRepository(Person).findOne(id);
+			res.status(200).send(people);
+		} catch (err) {
+			res.status(500).send('An unexpecter error has occured')
+		}
 	}
 
 	@put('/person')
@@ -95,4 +104,21 @@ class PersonController {
 		}
 	}
 
+	@get('/search')
+	@use(checkToken)
+	async searchPeople(req: Request, res: Response) {
+		const { q } = req.query
+		if (!q) res.status(422).send('Invalid Request')
+		else {
+			try {
+				const result = await getRepository(Person).createQueryBuilder('person')
+				.where('person.firstName ILIKE :q', { q: `%${q}%`})
+				.getMany()
+				res.status(200).send(result)
+			} catch (err) {
+				console.log(err)
+				res.status(500).send('An unexpected error has occured')
+			}
+		}
+	}
 }
