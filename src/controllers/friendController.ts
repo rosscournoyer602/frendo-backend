@@ -1,15 +1,16 @@
 import { Request, Response, } from 'express'
-import { get, put, post, controller, use } from './decorators'
+import { get, put, controller, use } from './decorators'
 import { getRepository } from 'typeorm'
 import { checkToken } from '../middleware/requireSignin'
 import { Friendship } from '../entity/Friendship'
-import { Person } from '../entity/Person'
+import { Chat } from '../entity/Chat'
 import { requestValidator } from '../middleware/requestValidator'
 
 @controller('')
 class FriendshipController {
 
 	@get('/friends')
+	// @use(requestValidator(['wuery'], 'query'))
 	@use(checkToken)
 	async getFriends(req: Request, res: Response) {
 		const { id } = req.query
@@ -23,9 +24,9 @@ class FriendshipController {
     res.send(friends);
 	}
 
-	@post('/friends')
+	@put('/friends')
 	@use(checkToken)
-	@use(requestValidator(['id1', 'id2', 'status', 'actionTaker']))
+	@use(requestValidator(['id1', 'id2', 'status', 'actionTaker'], 'body'))
 	async addFriends(req: Request, res: Response) {
 		const { id1, id2, status, actionTaker } = req.body
 		const repo = getRepository(Friendship)
@@ -55,6 +56,11 @@ class FriendshipController {
 						personTwo: personTwoId,
 						status,
 						actionTaker
+					})
+
+					getRepository(Chat).save({
+						friendship: result,
+						messages:"[{ content: sender: null, reciever: null, content: 'Start Chatting!' }]"
 					})
 					res.status(200).send(result)
 				} catch (err) {

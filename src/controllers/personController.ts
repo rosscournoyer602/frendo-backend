@@ -43,7 +43,7 @@ class PersonController {
 
 	@put('/person')
 	@use(checkToken)
-	@use(requestValidator(['id']))
+	@use(requestValidator(['id'], 'body'))
 	async addPerson(req: Request, res: Response) {
 		const repo = getRepository(Person)
 		var { id, firstName, avatar, prevAvatar} = req.body
@@ -105,6 +105,7 @@ class PersonController {
 	}
 
 	@get('/search')
+	// @use(requestValidator(['q'], 'query'))
 	@use(checkToken)
 	async searchPeople(req: Request, res: Response) {
 		const { q } = req.query

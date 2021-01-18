@@ -17,7 +17,7 @@ function tokenForUser(userEmail: string) {
 class AuthController {
 
 	@post('/signup')
-	@use(requestValidator(['email', 'password', 'confirmPassword']))
+	@use(requestValidator(['email', 'password', 'confirmPassword'], 'body'))
   async signup (req: Request, res: Response) {
 		const { email } = req.body
 		const userRepo = getRepository(User)
@@ -53,7 +53,7 @@ class AuthController {
   }
 
 	@post('/signin')
-	@use(requestValidator(['email', 'password']))
+	@use(requestValidator(['email', 'password'], 'body'))
 	@use(signIn)
   async signin(req: Request, res: Response) {
 		res.send({ token: tokenForUser(res.locals.user.email), user: res.locals.user })
