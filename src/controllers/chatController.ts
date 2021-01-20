@@ -13,14 +13,14 @@ const io = require('../WebSocket')
 class ChatController {
 
 	@put('/chat')
-	@use(requestValidator(['friendshipId'], 'body'))
+	@use(requestValidator(['id', 'messages'], 'body'))
 	@use(checkToken)
 	async addChat(req: Request, res: Response) {
-		const { id, content } = req.body
+		const { id, messages } = req.body
 		try {
 			const result = await getRepository(Chat).save({
 				id,
-				content
+				messages
 			})
 			res.status(200).send(result)
 		} catch (err) {
@@ -34,7 +34,6 @@ class ChatController {
 	@use(checkToken)
 	async getChat(req: Request, res: Response) {
 		const id = req.query.id
-		console.log('REQUERY', id)
 		try {
 			const	result = await getRepository(Chat).createQueryBuilder('chat')
 			.where('chat.friendship = :id', {

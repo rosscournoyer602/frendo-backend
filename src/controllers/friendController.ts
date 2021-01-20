@@ -60,7 +60,7 @@ class FriendshipController {
 
 					getRepository(Chat).save({
 						friendship: result,
-						messages:"[{ content: sender: null, reciever: null, content: 'Start Chatting!' }]"
+						messages:'[{ "sender": null, "reciever": null, "content": "Start Chatting!" }]'
 					})
 					res.status(200).send(result)
 				} catch (err) {
