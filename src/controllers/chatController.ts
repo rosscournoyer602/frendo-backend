@@ -7,7 +7,7 @@ import { Person } from '../entity/Person'
 import { Chat } from '../entity/Chat'
 import { requestValidator } from '../middleware/requestValidator'
 
-const io = require('../WebSocket')
+const SocketIO = require('../WebSocket')
 
 @controller('')
 class ChatController {
@@ -34,6 +34,7 @@ class ChatController {
 	@use(checkToken)
 	async getChat(req: Request, res: Response) {
 		const id = req.query.id
+		const connection = SocketIO.connection()
 		try {
 			const	result = await getRepository(Chat).createQueryBuilder('chat')
 			.where('chat.friendship = :id', {
