@@ -1,0 +1,24 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "Ross",
+  "password": "password",
+  "database": "tsed",
+  "synchronize": true,
+  "logging": "schema",
+  "entities": [
+    "build/entity/*.js"
+  ],
+  "migrations": [
+     "src/migration/**/*.ts"
+  ],
+  "subscribers": [
+     "src/subscriber/**/*.ts"
+  ],
+  "cli": {
+     "entitiesDir": "build/entity",
+     "migrationsDir": "build/migration",
+     "subscribersDir": "build/subscriber"
+  }
+}
