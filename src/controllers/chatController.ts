@@ -24,7 +24,6 @@ class ChatController {
 				messages
 			})
 			res.status(200).send(result)
-			console.log('RESULT', result)
 			socket.emitEvent(`message${friendshipId}`, result)
 		} catch (err) {
 			console.log(err)
