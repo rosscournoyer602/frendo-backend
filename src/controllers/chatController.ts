@@ -13,16 +13,19 @@ const SocketIO = require('../WebSocket')
 class ChatController {
 
 	@put('/chat')
-	@use(requestValidator(['id', 'messages'], 'body'))
+	@use(requestValidator(['id', 'messages', 'friendshipId'], 'body'))
 	@use(checkToken)
 	async addChat(req: Request, res: Response) {
-		const { id, messages } = req.body
+		const { id, messages, friendshipId } = req.body
+		const socket = SocketIO.connection()
 		try {
 			const result = await getRepository(Chat).save({
 				id,
 				messages
 			})
 			res.status(200).send(result)
+			console.log('RESULT', result)
+			socket.emitEvent(`message${friendshipId}`, result)
 		} catch (err) {
 			console.log(err)
 			res.status(500).send('An unexpected error has occured')
@@ -34,7 +37,6 @@ class ChatController {
 	@use(checkToken)
 	async getChat(req: Request, res: Response) {
 		const id = req.query.id
-		const connection = SocketIO.connection()
 		try {
 			const	result = await getRepository(Chat).createQueryBuilder('chat')
 			.where('chat.friendship = :id', {

@@ -20,7 +20,9 @@ class SocketIO {
 
 		io.on('connection', (socket: Socket) => {
 			this.socket = socket
-			socket.emit('message', 'Hello Client!')
+			this.socket.on('message', (message: string) => {
+				console.log(message)
+			})
 		})
 	}
 

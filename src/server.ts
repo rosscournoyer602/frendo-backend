@@ -4,7 +4,7 @@ import bodyParser from 'body-parser'
 import { AppRouter } from './AppRouter'
 import morgan from 'morgan'
 import cors from 'cors'
-import { createServer, Server } from 'http'
+import { createServer } from 'http'
 import { createConnection } from 'typeorm'
 const socketIO = require('./WebSocket')
 
@@ -23,7 +23,5 @@ createConnection().then(() => {
 	app.use(AppRouter.getInstance());
 	const httpServer = createServer(app)
 	socketIO.connect(httpServer)
-	const io = socketIO.connection()
-	console.log('AIOIO', io)
   httpServer.listen(process.env.PORT)
 });
