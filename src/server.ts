@@ -16,6 +16,7 @@ import './controllers/chatController'
 
 createConnection().then(() => {
 	const app = express()
+	app.use(express.static('build'));
 	app.use(cors())
   app.use(morgan(':method :url :status :response-time ms'))
   app.use(bodyParser.urlencoded({ extended: true }))
