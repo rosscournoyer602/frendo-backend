@@ -8,8 +8,7 @@
     "npm": "6.9.0"
   },
   "scripts": {
-		"start": "node build/server.js",
-		"postinstall": "tsc"
+		"start": "node build/server.js"
   },
   "author": "",
   "license": "ISC",
