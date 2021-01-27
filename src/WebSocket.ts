@@ -13,7 +13,7 @@ class SocketIO {
 	connect(http: http.Server) {
 		const io = new Server(http, {
 			cors: {
-				origin: 'http://localhost:3000',
+				origin: '*',
 				credentials: true
 			}
 		})
