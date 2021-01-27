@@ -24,8 +24,7 @@ createConnection({
 	port: 5432,
 	synchronize: true,
 	url: process.env.DATABASE_URL,
-	ssl: true,
-	extra: {
+	ssl: {
 		rejectUnauthorized: false
 	}
 }).then(() => {
