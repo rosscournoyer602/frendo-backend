@@ -1,26 +1,10 @@
 {
+	"url": "process.env.DATABASE_URL",
   "type": "postgres",
-  "host": "ec2-52-72-190-41.compute-1.amazonaws.com",
-  "port": 5432,
-  "username": "enkedtorlvkzxl",
-  "password": "463a96c971fb11b32eebcf71d77e7c1415c2377dad9f4ef11c6f76bf819dc340",
-  "database": "d1prfvc9rsadg7",
   "synchronize": true,
-  "logging": "schema",
   "entities": [
     "build/entity/*.js"
   ],
-  "migrations": [
-     "src/migration/**/*.ts"
-  ],
-  "subscribers": [
-     "src/subscriber/**/*.ts"
-  ],
-  "cli": {
-     "entitiesDir": "build/entity",
-     "migrationsDir": "build/migration",
-     "subscribersDir": "build/subscriber"
-	},
 	"extra": {
 		"ssl": true
 	}
