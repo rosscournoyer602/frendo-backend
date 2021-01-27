@@ -23,7 +23,7 @@ createConnection({
 	entities: [Chat, Friendship, Person, User],
 	port: 5432,
 	synchronize: true,
-	url: process.env.TYPEORM_URL,
+	url: process.env.DATABASE_URL,
 	extra: { ssl: true }
 }).then(() => {
 	const app = express()
