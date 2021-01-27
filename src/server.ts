@@ -24,7 +24,10 @@ createConnection({
 	port: 5432,
 	synchronize: true,
 	url: process.env.DATABASE_URL,
-	extra: { ssl: true }
+	ssl: true,
+	extra: {
+		rejectUnauthorized: false
+	}
 }).then(() => {
 	const app = express()
 	app.use(cors())
