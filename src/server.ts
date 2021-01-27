@@ -13,8 +13,19 @@ import './controllers/authController'
 import './controllers/personController'
 import './controllers/friendController'
 import './controllers/chatController'
+import { Chat } from './entity/Chat'
+import { Friendship } from './entity/Friendship'
+import { Person } from './entity/Person'
+import { User } from './entity/User'
 
-createConnection().then(() => {
+createConnection({
+	type: 'postgres',
+	entities: [Chat, Friendship, Person, User],
+	port: 5432,
+	synchronize: true,
+	url: process.env.TYPEORM_URL,
+	extra: { ssl: true }
+}).then(() => {
 	const app = express()
 	app.use(cors())
   app.use(morgan(':method :url :status :response-time ms'))
