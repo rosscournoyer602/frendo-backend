@@ -52,7 +52,7 @@ class PersonController {
 			const type = avatar.split(';')[0].split('/')[1]
 			const buffer = Buffer.from(avatar.replace(/^data:image\/\w+;base64,/, ''), 'base64')
 			const params = {
-				Bucket: 'friendo2',
+				Bucket: 'friendo3',
 				Key: `${id}${Date.now()}.${type}`,
 				Body: buffer,
 				ACL: 'public-read',
@@ -62,12 +62,10 @@ class PersonController {
 			// delete any old avatar for this user i
 			if (prevAvatar) {
 				const deleteParams = {
-					Bucket: 'friendo2',
+					Bucket: 'friendo3',
 					Delete: {
 						Objects: [
-							{ Key: `200x200/${prevAvatar}` },
-							{ Key: `64x64/${prevAvatar}` },
-							{ Key: `32x32/${prevAvatar}`}
+							{ Key: `${prevAvatar}` }
 						]
 					}
 				};
