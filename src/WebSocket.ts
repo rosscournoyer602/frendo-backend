@@ -14,7 +14,7 @@ class SocketIO {
 		const io = new Server(http, {
 			cors: {
 				origin: '*',
-				credentials: true
+				// credentials: true
 			}
 		})
 
