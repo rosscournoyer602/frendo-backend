@@ -7,10 +7,10 @@ export class Chat {
   @PrimaryGeneratedColumn()
   id!: number;
 
-	@OneToOne(type => Friendship)
-	@JoinColumn()
-	friendship!: Friendship
+  @OneToOne(type => Friendship)
+  @JoinColumn()
+  friendship!: Friendship
 
-	@Column()
-	messages!: string
+  @Column()
+  messages!: string
 }

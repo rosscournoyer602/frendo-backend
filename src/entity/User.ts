@@ -4,13 +4,13 @@ import { Person } from './Person'
 @Entity()
 export class User {
 
-	@PrimaryColumn()
+  @PrimaryColumn()
   email!: string;
 
   @Column()
-	password!: string
-	
-	@OneToOne(type => Person)
-	@JoinColumn()
-	person!: Person
+  password!: string
+  
+  @OneToOne(type => Person)
+  @JoinColumn()
+  person!: Person
 }

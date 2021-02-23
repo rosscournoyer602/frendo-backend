@@ -9,17 +9,17 @@ export class Friendship {
   @PrimaryGeneratedColumn()
   id!: number;
 
-	@OneToOne(type => Person)
-	@JoinColumn()
-	personOne!: Person
+  @OneToOne(type => Person)
+  @JoinColumn()
+  personOne!: Person
 
-	@OneToOne(type => Person)
-	@JoinColumn()
-	personTwo!: Person
+  @OneToOne(type => Person)
+  @JoinColumn()
+  personTwo!: Person
 
-	@Column()
-	status!: number
+  @Column()
+  status!: number
 
-	@Column()
-	actionTaker!: number
+  @Column()
+  actionTaker!: number
 }

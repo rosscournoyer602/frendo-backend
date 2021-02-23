@@ -7,9 +7,9 @@ export class Person {
   id!: number
 
   @Column('text', { nullable: true })
-	firstName?: string
+  firstName?: string
 
-	@Column('text', { nullable: true })
-	avatar?: string
+  @Column('text', { nullable: true })
+  avatar?: string
 
 }
